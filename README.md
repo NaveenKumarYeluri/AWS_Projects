@@ -11,7 +11,7 @@ This repository contains a collection of three distinct projects focused on diff
 ## 🚀 Project Portfolio
 
 ### 1. Flight Analytics System ✈️
-### 📊 Data Architecture: Star Schema
+#### 📊 Data Architecture: Star Schema
 To optimize the data for analytical querying, the raw JSON, CSV flight data was modeled into a robust Star Schema consisting of:
 
 * **Fact Tables:**
@@ -22,23 +22,27 @@ To optimize the data for analytical querying, the raw JSON, CSV flight data was 
   * `Dim_Aircraft`: Contains aircraft specifications (model, tail number).
   * `Dim_Passenger`: Stores frequent flier status and demographic details.
   * `Dim_Date`: Enables time-series analysis across travel dates, quarters, and months.
+#### ⚙️ The ETL Pipeline
+This project leverages AWS Redshift to handle the heavy lifting for data transformation. The current ELT (Extract, Load, Transform) approach follows these stages:
 
+* **Data Ingestion (S3):**
+  * `1_upload_local_to_s3 (Heavy_lifting_from_Redshift).py`: A custom Python script utilizing the boto3 SDK to securely push the large local source files to Amazon S3. Sample files have been attached in the folder SourceFiles.
 
 ---
 
 ## 🛠️ Core Technologies
-| Category | Tools & Services |
-| :--- | :--- |
-| **Cloud Provider** | AWS (Amazon Web Services) |
-| **Languages** | Python, SQL |
-| **Data Concepts** | Data Modelling, JSON Parsing, OLTP, OLAP, ETL |
-| **Optimization** | Query Profiling, Indexing, Performance Tuning |
+| Category           | Tools & Services                              |
+| :-------------------| :----------------------------------------------|
+| **Cloud Provider** | AWS (Amazon Web Services)                     |
+| **Languages**      | Python, SQL                                   |
+| **Data Concepts**  | Data Modelling, JSON Parsing, OLAP, ETL       |
+| **Optimization**   | Query Profiling, Indexing, Performance Tuning |
 
 ---
 
 ## 📂 Repository Structure
 ```text
-├── flight-analytics/       # Python scripts, JSON, CSV parsers, and SQL DDL/DML
-├── education-system/       # Admin scripts and OLTP-to-OLAP migration logic
-├── order-management/       # Performance tuning scripts, indexes, and optimized queries
+├── FlightAnalyticsSystem/       # Python scripts, JSON, CSV parsers, and SQL DDL/DML
+├── EducationSystem/       # Admin scripts and OLTP-to-OLAP migration logic
+├── OrdersManagement/       # Performance tuning scripts, indexes, and optimized queries
 └── README.md               # Portfolio documentation

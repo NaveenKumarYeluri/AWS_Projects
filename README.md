@@ -11,19 +11,42 @@ This repository contains a collection of three distinct projects focused on diff
 ## 🚀 Project Portfolio
 
 ### 1. Flight Analytics System ✈️
-#### 📊 Data Architecture: OBT
-To optimize the data for analytical querying, the raw CSV flight data was modeled into One Big Table consisting of:
+#### 📊 Data Modeling (OBT Architecture)
+We use a modern OBT (One Big Table) approach. This means we combine all information into one massive, super-fast table instead of many small ones.
 
 * **Fact Table:**
-  * `Fact_Flight_Transactions`: Captures all metrics including traditional dimentional columns.
+  * `Fact_Flight_Transactions`: Captures transactional metrics and denormalized dimensions in a single unified table for rapid data retrieval.
 * **Dimension Table:**
-  * `Dim_Date`: Enables time-series analysis across travel dates, quarters, and months.
+  * `Dim_Date`: Provides a standardized calendar framework for time-series analysis and reporting.
   
 #### ⚙️ The ETL Pipeline
 This project leverages AWS Redshift to handle data transformation. The current ELT (Extract, Load, Transform) approach follows these stages:
 
 * **Data Ingestion (S3):**
-  * `1_upload_local_to_s3_Heavy_lifting_from_Redshift.py`: A custom Python script utilizing the boto3 SDK to securely push the large local source files to Amazon S3. Sample files has been attached.
+
+  * `1_upload_local_to_s3_Heavy_lifting_from_Redshift.py`: Automates secure local-to-S3 data uploads using Boto3.
+  * `2_schema_setup.py`: One-time setup script to initialize Redshift tables via the Data API. Designed to minimize costs and security risks by removing the need for an Elastic IP.
+  
+* **Transformation & Loading (Redshift):**
+
+  * `3_daily_etl_job.py`: The core engine of the pipeline that manages the flow of data inside Redshift.
+  
+    * **Staging:** Moves raw data from S3 into a temporary staging table for cleaning.
+    * **Deduplication:** Uses SQL logic to identify and remove duplicate ticket records, ensuring only the latest information is kept.
+    * **UPSERT Logic:** Performs a "Smart Update"—it updates existing flight details and inserts new records at the same time to prevent data gaps.
+    * **OBT Modeling:** Finalizes the data into a One Big Table (OBT) format, making it ready for fast analytical queries without complex joins.
+    
+* **Post-Processing & Archival:**
+
+    * **Automated Archiving:** Once the Redshift transaction is successfully committed, the script triggers a cleanup of the S3 bucket.
+    * **File Migration:** Processed CSV files are moved from the Source folder to an Archive folder. This ensures that the same data is never processed twice and keeps the storage organized.
+    * **Date Synchronization:** Automatically checks and generates new records for the Dim_Date table to ensure the calendar dimension stays up to date with new flight schedules.
+    
+* **Why this structure works:**
+
+    1. **Stage 1 (Ingestion)** gets the data into the cloud.
+    2. **Stage 2 (Transformation)** does the heavy lifting of cleaning and organizing the data into your OBT model.
+    3. **Stage 3 (Post-Processing)** tidies up the environment so the pipeline is ready for the next run.
 
 ---
 

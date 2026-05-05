@@ -41,12 +41,6 @@ This project leverages AWS Redshift to handle data transformation. The current E
     * **Automated Archiving:** Once the Redshift transaction is successfully committed, the script triggers a cleanup of the S3 bucket.
     * **File Migration:** Processed CSV files are moved from the Source folder to an Archive folder. This ensures that the same data is never processed twice and keeps the storage organized.
     * **Date Synchronization:** Automatically checks and generates new records for the Dim_Date table to ensure the calendar dimension stays up to date with new flight schedules.
-    
-* **Why this structure works:**
-
-    1. **Stage 1 (Ingestion)** gets the data into the cloud.
-    2. **Stage 2 (Transformation)** does the heavy lifting of cleaning and organizing the data into your OBT model.
-    3. **Stage 3 (Post-Processing)** tidies up the environment so the pipeline is ready for the next run.
 
 ---
 
@@ -59,6 +53,8 @@ This project leverages AWS Redshift to handle data transformation. The current E
 | **Optimization**   | Query Profiling, Indexing, Performance Tuning |
 
 ---
+
+**Note:** AI has been used in structuring all the README files.
 
 ## 📂 Repository Structure
 ```text

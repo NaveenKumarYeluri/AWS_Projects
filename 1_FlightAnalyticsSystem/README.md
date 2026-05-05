@@ -12,7 +12,7 @@ To conserve AWS free-tier credits and isolate the issue, testing was moved local
 
 ### Phase 2: Data Profiling & The "Aha!" Moment
 A rigorous data profiling exercise revealed critical insights about the source files:
-* **Source Disconnect:** The provided JSON files had virtually zero intersection with the 10 CSV files (only 2 matching records found out of gigabytes of data). The JSON data was intentionally excluded from the pipeline to maintain integrity.
+* **Source Disconnect:** The provided JSON files had little intersection with the 10 CSV files. The JSON data was intentionally excluded from the pipeline to maintain integrity.
 * **The Synthetic Data Anomaly:** The CSV files contained highly randomized, synthetic data. Traditional dimensional fields (`aircraft_id`, `flight_id`, `itinerary_no`, `passenger_name`) had nearly 100% cardinality (uniqueness). 
 * **The Problem:** Because the data lacked true 1-to-Many referential integrity, the Dimension tables were almost as large as the Fact table. This forced the database to perform massive, billion-row Hash Joins, completely crashing the execution plan.
 

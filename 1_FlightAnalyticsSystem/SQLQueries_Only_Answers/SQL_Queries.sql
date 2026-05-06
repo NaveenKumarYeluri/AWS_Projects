@@ -180,8 +180,6 @@ WITH stats AS (
         SUM(CAST(fuel_consumed_litre AS FLOAT8)) AS sum_x,
         SUM(CAST(distance AS FLOAT8)) AS sum_y,
         SUM(CAST(fuel_consumed_litre AS FLOAT8) * CAST(distance AS FLOAT8)) AS sum_xy,
-
-        -- High-speed CPU math (multiplication instead of POWER)
         SUM(CAST(fuel_consumed_litre AS FLOAT8) * CAST(fuel_consumed_litre AS FLOAT8)) AS sum_x2,
         SUM(CAST(distance AS FLOAT8) * CAST(distance AS FLOAT8)) AS sum_y2
     FROM aws_project.Fact_Flight_Transactions
@@ -198,13 +196,23 @@ FROM stats;
 
 -- 12)
 
+SELECT
+    passenger_country,
+    COUNT(ticket_no) as tickets_per_country
+FROM aws_project.Fact_Flight_Transactions
+WHERE passenger_country IS NOT NULL
+GROUP BY passenger_country
+ORDER BY tickets_per_country DESC
+LIMIT 5;
+
+
+-- 13)
+
 WITH age_calculation AS (
     SELECT
         ticket_no,
-        -- Calculate math ONCE per row for maximum speed
         DATEDIFF('year', passenger_dob, CURRENT_DATE) AS age
     FROM aws_project.Fact_Flight_Transactions
-    -- Crucial: Drop missing data so it doesn't default to 'Older'
     WHERE passenger_dob IS NOT NULL
 )
 SELECT
@@ -214,12 +222,44 @@ SELECT
         WHEN age <= 55 THEN '3. Senior Adult'
         ELSE '4. Older'
     END AS age_group,
-
-    -- Using simple COUNT for raw speed (assuming 1 row = 1 flight)
     COUNT(ticket_no) AS total_flights_taken
 FROM age_calculation
 GROUP BY age_group
 ORDER BY age_group ASC;
 
 
--- 13)
+-- 14)
+
+WITH age_calculation AS (
+    SELECT
+        ticket_no,
+        passenger_flight_class,
+        DATEDIFF('year', passenger_dob, CURRENT_DATE) AS age
+    FROM aws_project.Fact_Flight_Transactions
+    WHERE passenger_flight_class IS NOT NULL
+    AND passenger_dob IS NOT NULL
+),
+create_age_groups AS (
+    SELECT
+        ticket_no,
+        passenger_flight_class,
+        CASE
+            WHEN age <= 23
+                THEN '1. Young (0-23)'
+            WHEN age <= 38
+                THEN '2. Adult (24-38)'
+            WHEN age <= 55
+                THEN '3. Senior Adult (39-55)'
+            ELSE '4. Older (56+)'
+        END AS age_group
+    FROM age_calculation
+)
+SELECT
+    age_group,
+    passenger_flight_class,
+    COUNT(ticket_no) AS total_tickets
+FROM create_age_groups
+GROUP BY age_group, passenger_flight_class
+ORDER BY age_group ASC, passenger_flight_class ASC;
+
+

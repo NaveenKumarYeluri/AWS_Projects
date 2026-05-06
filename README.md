@@ -1,7 +1,7 @@
 # AWS Cloud Engineering & Data Portfolio
 
 ### 🏢 Training Source
-These projects were developed as part of a comprehensive AWS training and certification program at **[3 Aayaam](https://www.3aayaam.in/)**. 
+These projects were developed as part of a comprehensive AWS training at **[3 Aayaam](https://www.3aayaam.in/)**. 
 
 ## 📝 Overview
 This repository contains a collection of three distinct projects focused on different aspects of cloud engineering, data engineering, and database optimization. Together, they demonstrate end-to-end proficiency in AWS infrastructure, ETL pipelines, schema design, and query optimization.

@@ -32,7 +32,7 @@ def run_sql(sql_text):
         status = status_resp['Status']
 
         if status == 'FINISHED':
-            return query_id  # <--- CRITICAL: Return ONLY the string ID
+            return query_id  # <--- Return ONLY the string ID
         elif status in ['FAILED', 'ABORTED']:
             raise Exception(f"SQL Failed: {status_resp.get('Error')}")
 
@@ -63,7 +63,7 @@ def get_results(query_id):
     """Fetches the actual rows from a finished query."""
     return data_client.get_statement_result(Id=query_id)['Records']
 
-# --- HELPER: DATE GENERATION ---
+# --- DATE GENERATION ---
 def generate_date_records(start_date, end_date):
     delta = timedelta(days=1)
     date_records = []
@@ -104,14 +104,14 @@ def execute_obt_etl():
     print(f"Starting ETL for Workgroup: {WORKGROUP}")
 
     try:
-        ## STEP 1: LOAD STAGING
-        #print("1. Truncating and Copying Staging...")
-        #copy_sql = f"""
-        #    TRUNCATE TABLE aws_project.stg_csv_raw;
-        #    COPY aws_project.stg_csv_raw FROM '{CSV_SOURCE}'
-        #    IAM_ROLE '{IAM_ROLE}' FORMAT AS CSV IGNOREHEADER 1;
-        #"""
-        #run_sql(copy_sql)
+        # STEP 1: LOAD STAGING
+        print("1. Truncating and Copying Staging...")
+        copy_sql = f"""
+            TRUNCATE TABLE aws_project.stg_csv_raw;
+            COPY aws_project.stg_csv_raw FROM '{CSV_SOURCE}'
+            IAM_ROLE '{IAM_ROLE}' FORMAT AS CSV IGNOREHEADER 1;
+        """
+        run_sql(copy_sql)
 
         # STEP 2: DYNAMIC DATES
         print("2. Syncing Date Dimension...")

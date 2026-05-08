@@ -42,6 +42,10 @@ This project leverages AWS Redshift to handle data transformation. The current E
     * **File Migration:** Processed CSV files are moved from the Source folder to an Archive folder. This ensures that the same data is never processed twice and keeps the storage organized.
     * **Date Synchronization:** Automatically checks and generates new records for the Dim_Date table to ensure the calendar dimension stays up to date with new flight schedules.
 
+    
+### 2. Education System
+As of now Project 2 is all about Administration, Query Tuning and data movement from OLTP to OLAP using Zero ETL or DMS. More information will be provided as we progress.
+
 ---
 
 ## 🛠️ Core Technologies

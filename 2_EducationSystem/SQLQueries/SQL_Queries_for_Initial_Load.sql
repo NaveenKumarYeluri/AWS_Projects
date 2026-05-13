@@ -557,7 +557,8 @@ WHERE
     row_num = 1
     AND institute_id_sk = 'TISN707'
 ORDER BY
-    institute_name;
+    institute_name,
+    institute_id_sk;
 
 /*
 -------------------------------------------------------------------------
@@ -698,7 +699,6 @@ LIMIT 5;
 /*
 -------------------------------------------------------------------------
 Obversations:
-Got this popup: The maximum size of result was reached. You can use UNLOAD commands instead.
 
 -- Q9:
 SELECT

@@ -258,7 +258,7 @@ SELECT
     encoded,
     diststyle,
     sortkey1, -- institute: institute_id_sk, applicant: applicant_id_sk
-    skew_rows, -- institute: 1.16 (improvement), applicant: NULL
+    skew_rows, -- institute: 1.16 (improvement), applicant: NULL (Same as earlier, expected since our DISSTYLE is EVEN)
     skew_sortkey1, -- 1 for both
     "size" as size_mb -- applicant: 4352 (improvement, size reduced), institute: 3584 (Seems same as earlier)
 FROM svv_table_info
@@ -287,4 +287,34 @@ ANALYZE aws_project.applicant;-- Took: 2.2s
 -- Now stats too are fine.
 
 
--- -- Step 3: Re-run our SQL Queries as per given Business Statements. Further optimisation might be needed for P1s atleast.
+-- Step 3: Re-run our SQL Queries as per given Business Statements. Further optimisation might be needed for P1s atleast.
+-- We can check Final_SQL_Queries.sql. Execution times were fine. In cases where data is huge time was inflated because of network and queries are running fine in under seconds. We will check further what has to be done.
+
+
+VACUUM DELETE ONLY aws_project.institute;-- Took: 1m 42.7s
+-- Even after vacuum we have same size which means 1MB blocks are filled in such a way that we cannot recover that space.
+
+VACUUM FULL aws_project.institute;-- Took: 336ms
+ANALYZE aws_project.institute;-- Took: 110ms
+
+
+-- We will check how many records were fit into 1MB block.
+SELECT
+    "table" AS table_name,
+    tbl_rows AS total_records,
+    size AS total_megabytes,
+    -- Calculate how many records fit in 1 MB
+    CASE
+        WHEN size > 0 THEN (tbl_rows / size)
+        ELSE 0
+    END AS records_per_mb
+FROM svv_table_info
+WHERE "schema" = 'aws_project'
+  AND "table" IN ('applicant', 'institute');
+-- applicant: 2888.1357 (Size: 4352 MB)
+-- institute: 28.13 (Size: 3584) It seems
+
+
+-- Step 4: We are going to done tests by changing DISSTYLE for applicant table.
+-- Do remember we have EVEN as DISSTYLE for this table, where as institute has Primay Key as Key.
+-- We will two versions of applicant, with one having DISSTYLE = EVEN and the other will have DISSTYLE = KEY (institute_id_fk, both tables have key on same column.)

@@ -312,9 +312,141 @@ FROM svv_table_info
 WHERE "schema" = 'aws_project'
   AND "table" IN ('applicant', 'institute');
 -- applicant: 2888.1357 (Size: 4352 MB)
--- institute: 28.13 (Size: 3584) It seems
+-- institute: 28.13 (Size: 3584) It seems 1MB blocks do have empty space.
 
 
--- Step 4: We are going to done tests by changing DISSTYLE for applicant table.
+-- Step 4: We are going to some tests by changing DISSTYLE for applicant table.
 -- Do remember we have EVEN as DISSTYLE for this table, where as institute has Primay Key as Key.
--- We will two versions of applicant, with one having DISSTYLE = EVEN and the other will have DISSTYLE = KEY (institute_id_fk, both tables have key on same column.)
+-- We will have 3 versions of applicant, with one having DISSTYLE = EVEN (present case) and 2nd will have DISSTYLE = KEY (institute_id_fk, both tables will have same. SORTKEY = institute_id_fk) and 3rd one DISSTYLE = KEY (institute_id_fk, with AUTO SORTKEY)
+
+
+CREATE TABLE aws_project.applicant_optimized(
+    applicant_id_sk BIGINT PRIMARY KEY,
+    applicant_name VARCHAR,
+    applicant_gender VARCHAR,
+    applicant_dob TIMESTAMP,
+    applicant_country VARCHAR,
+    applicant_qual_test_score DOUBLE PRECISION,
+    applicant_high_school_GPA DOUBLE PRECISION,
+    scholarship_grade VARCHAR,
+    scholarship_pct DOUBLE PRECISION,
+    interview_date DATE,
+    interview_score DOUBLE PRECISION,
+    admission_date TIMESTAMP,
+    institute_id_fk VARCHAR,
+    course_name VARCHAR,
+    FOREIGN KEY (institute_id_fk) REFERENCES aws_project.institute(institute_id_sk)
+)
+DISTSTYLE KEY
+DISTKEY (institute_id_fk)
+SORTKEY (institute_id_fk);-- Took: 12.15429700
+
+
+INSERT INTO aws_project.applicant_optimized
+SELECT * FROM aws_project.applicant;-- Took: 1m 23.3s
+
+
+ANALYSE aws_project.applicant_optimized; --3.2s
+
+
+CREATE TABLE aws_project.applicant_optimized_nosort(
+    applicant_id_sk BIGINT PRIMARY KEY,
+    applicant_name VARCHAR,
+    applicant_gender VARCHAR,
+    applicant_dob TIMESTAMP,
+    applicant_country VARCHAR,
+    applicant_qual_test_score DOUBLE PRECISION,
+    applicant_high_school_GPA DOUBLE PRECISION,
+    scholarship_grade VARCHAR,
+    scholarship_pct DOUBLE PRECISION,
+    interview_date DATE,
+    interview_score DOUBLE PRECISION,
+    admission_date TIMESTAMP,
+    institute_id_fk VARCHAR,
+    course_name VARCHAR,
+    FOREIGN KEY (institute_id_fk) REFERENCES aws_project.institute(institute_id_sk)
+)
+DISTSTYLE KEY
+DISTKEY (institute_id_fk); -- Let it be AUTO sort.
+
+-- Load your clean data into it
+INSERT INTO aws_project.applicant_optimized_nosort
+SELECT * FROM aws_project.applicant;
+
+ANALYSE aws_project.applicant_optimized_nosort;
+
+
+table_name	                total_records	  total_megabytes	records_per_mb
+applicant_optimized	        12569167	       4476	                2808.1248
+applicant	                12569167	       4352	                2888.1357
+applicant_optimized_nosort	12569167	       2176	                5776.2715
+institute	                100818	           3584	                28.13
+
+
+table_id	table_name	                   encoded	            diststyle	            sortkey1	        skew_rows	skew_sortkey1	size_mb	  pct_used
+244138	    applicant	                   Y, AUTO(ENCODE)	    EVEN	                applicant_id_sk	    NULL	      1	             4352	  0.0068
+297112	    applicant_optimized	           Y, AUTO(ENCODE)	    KEY(institute_id_fk)	institute_id_fk	    1.34	      0.67	         4476	  0.0069
+305304	    applicant_optimized_nosort	   Y, AUTO(ENCODE)	    KEY(institute_id_fk)	AUTO(SORTKEY)	    1.34	      NULL	         2176	  0.0034
+244134	    institute	                   Y, AUTO(ENCODE)	    KEY(institute_id_sk)	institute_id_sk	    1.16	      1	             3584	  0.0056
+
+
+-- Results for 1st P1:
+
+
+-- Drops the temp table if you are re-running it
+DROP TABLE IF EXISTS test_baseline;-- 9.3s, 31ms, 21ms, 22ms, 19ms
+CREATE TEMP TABLE test_baseline AS
+SELECT
+    a.applicant_id_sk,
+    a.applicant_name,
+    a.course_name,
+    a.admission_date,
+    i.institute_name
+FROM aws_project.applicant AS a
+INNER JOIN aws_project.institute AS i
+    ON i.institute_id_sk = a.institute_id_fk
+ORDER BY
+    i.institute_name,
+    a.applicant_name;-- R1: 2m 20.3s, R2: 5.1s, R3: 5.3s, R4: 4.4s, R5: 4.4s, r6: 4.4
+
+
+
+DROP TABLE IF EXISTS test_nosort;-- 11ms, 21ms, 21ms, 21ms, 20ms
+CREATE TEMP TABLE test_nosort AS
+SELECT
+    a.applicant_id_sk,
+    a.applicant_name,
+    a.course_name,
+    a.admission_date,
+    i.institute_name
+FROM aws_project.applicant_optimized_nosort AS a
+INNER JOIN aws_project.institute AS i
+    ON i.institute_id_sk = a.institute_id_fk
+ORDER BY
+    i.institute_name,
+    a.applicant_name;-- R1: 6s, R2: 4.8s, R3: 4.7s, R4: 4.2s, R5: 4.2s, R6: 4.2s
+
+
+
+DROP TABLE IF EXISTS test_optimized;-- 14ms, 26ms, 20ms, 20ms, 21ms
+CREATE TEMP TABLE test_optimized AS
+SELECT
+    a.applicant_id_sk,
+    a.applicant_name,
+    a.course_name,
+    a.admission_date,
+    i.institute_name
+FROM aws_project.applicant_optimized AS a
+INNER JOIN aws_project.institute AS i
+    ON i.institute_id_sk = a.institute_id_fk
+ORDER BY
+    i.institute_name,
+    a.applicant_name;-- R1: 5.1s, R2: 4s, R3: 3.1s, R4: 3.2s, R5: 2.6s, R6: 2.9s
+
+-- We can see results above
+    -- default version went from 5 sec to 4 sec.
+    -- AUTOSORT version went from 6 to 4 sec.
+    -- Collocated Join version went from 5 to ~3 sec.
+
+-- As of now for 1st Business Statement Collocated Joins method is working fine. We will verify for other P1 and P2's as well.
+-- I feel since this is serverless time will be inflated because at times, server will be idle, which is impacting. May be we will have to pay more attention to Execution time?

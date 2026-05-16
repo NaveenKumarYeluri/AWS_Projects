@@ -120,7 +120,7 @@ ORDER BY start_time DESC;
 
 QueryId: 9879247 (run 1)
 Elapsed Time: 299445
-Duration Seconds: 0.29944500 (299445) Before de-duplication: 158.127929 (Lot of improvement)
+Duration Seconds: 0.29944500 (299445) Before de-duplication: 158.127929 (Good)
 Returned Rows: 1
 Returned Bytes: 193
 Compile Time: 206043
@@ -130,7 +130,7 @@ Actual Records shown in the output screen: 1
 
 QueryId: 9879274 (run 2)
 Elapsed Time: 54491
-Duration Seconds: 0.05449100 (54491) Before de-duplication: 0.426868 (Lot of improvement)
+Duration Seconds: 0.05449100 (54491) Before de-duplication: 0.426868 (Good)
 Returned Rows: 1
 Returned Bytes: 193
 Compile Time: 253
@@ -140,7 +140,7 @@ Actual Records shown in the output screen: 1
 
 QueryId: 9879290 (run 3)
 Elapsed Time: 53294
-Duration Seconds: 0.05329400 (53294) Before de-duplication: 0.098171 (Lot of improvement)
+Duration Seconds: 0.05329400 (53294) Before de-duplication: 0.098171 (Good)
 Returned Rows: 1
 Returned Bytes: 193
 Compile Time: 235
@@ -185,7 +185,7 @@ ORDER BY start_time DESC;
 
 QueryId: 9879644 (run 1)
 Elapsed Time: 895889
-Duration Seconds: 0.89588900 (895889) Before de-duplication: 158.127929 (Lot of improvement)
+Duration Seconds: 0.89588900 (895889) Before de-duplication: 158.127929 (Good)
 Returned Rows: 83
 Returned Bytes: 4508
 Compile Time: 324947

@@ -448,5 +448,70 @@ ORDER BY
     -- AUTOSORT version went from 6 to 4 sec.
     -- Collocated Join version went from 5 to ~3 sec.
 
--- As of now for 1st Business Statement Collocated Joins method is working fine. We will verify for other P1 and P2's as well.
+-- As of now for 1st Business Statement Collocated Joins is working fine. We will verify for other P1 and P2's as well.
 -- I feel since this is serverless time will be inflated because at times, server will be idle, which is impacting. May be we will have to pay more attention to Execution time?
+
+
+-- Drops the temp table if you are re-running it
+DROP TABLE IF EXISTS test_baseline;--
+
+-- Forces Redshift to do all the math and sorting, but writes to a local temp disk
+CREATE TEMP TABLE test_baseline AS
+SELECT
+    a.applicant_id_sk,
+    a.applicant_name,
+    i.institute_name,
+    a.interview_score,
+    i.score_cut_off,
+    ROUND((i.score_cut_off - a.interview_score), 2) AS pct_short_by
+FROM aws_project.applicant AS a
+JOIN aws_project.institute AS i
+    ON i.institute_id_sk = a.institute_id_fk
+WHERE
+    a.interview_score < i.score_cut_off
+ORDER BY
+    i.institute_name,
+    a.applicant_name;-- R1: 13.2s, R2: 3.7s, R3: 3.8s, R4: 3.3s, R5: 3.3s, R6: 3.6s
+
+
+DROP TABLE IF EXISTS test_nosort;
+
+CREATE TEMP TABLE test_nosort AS
+SELECT
+    a.applicant_id_sk,
+    a.applicant_name,
+    i.institute_name,
+    a.interview_score,
+    i.score_cut_off,
+    ROUND((i.score_cut_off - a.interview_score), 2) AS pct_short_by
+FROM aws_project.applicant_optimized_nosort AS a
+JOIN aws_project.institute AS i
+    ON i.institute_id_sk = a.institute_id_fk
+WHERE
+    a.interview_score < i.score_cut_off
+ORDER BY
+    i.institute_name,
+    a.applicant_name;-- R1: 4.7s, R2: 3.2s, R3: 3s, R4: 3s, R5: 2.9s, R6: 3.1s
+
+
+DROP TABLE IF EXISTS test_optimized;
+
+CREATE TEMP TABLE test_optimized AS
+SELECT
+    a.applicant_id_sk,
+    a.applicant_name,
+    i.institute_name,
+    a.interview_score,
+    i.score_cut_off,
+    ROUND((i.score_cut_off - a.interview_score), 2) AS pct_short_by
+FROM aws_project.applicant_optimized AS a
+JOIN aws_project.institute AS i
+    ON i.institute_id_sk = a.institute_id_fk
+WHERE
+    a.interview_score < i.score_cut_off
+ORDER BY
+    i.institute_name,
+    a.applicant_name;-- R1: 6.2s, R2: 3.2s, R3: 2s, R4: 2s, R5: 2s, R6: 2s
+
+
+-- With the above runs it is obvious that Collocated Join + our Sort Key working fine and giving much better performance compared to the other two. So we will stick with this option and drop the other tables. With this our work on optimisation is completed.

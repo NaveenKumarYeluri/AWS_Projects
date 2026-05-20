@@ -58,7 +58,7 @@ Outputs exactly 20 directories (orders_group=1/ to orders_group=20/) holding hig
 ### 4. Cross-Partition Manifest Generation
 Because Athena assigns random UUIDs to files across distributed partitions, we want a Python script that creates Redshift manifest configuration file.
 
-* Available, as `manifest_file_generation.py`, in PythonFiles folder.
+* Available as `manifest_file_generation.py`, in PythonFiles folder.
 
 
 ### 5. High-Throughput Cluster Ingestion (Amazon Redshift)

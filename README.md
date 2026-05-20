@@ -44,7 +44,7 @@ This project leverages AWS Redshift to handle data transformation. The current E
 
     
 ### 2. Education System
-As of now Project 2 is all about Administration, Query Tuning and data movement from OLTP to OLAP using Zero ETL or DMS. More information will be provided as we progress.
+This project demonstrates an enterprise-grade cloud data architecture spanning automated ingestion, physical query optimization, and Data Lifecycle Management (DLM). It is divided into two major components: an automated ELT pipeline for an Education System with rigorous performance tuning, and a massive-scale Orders System demonstrating parallel ingestion, cold-data archival, and Serverless Data Lake querying.
 
 ---
 

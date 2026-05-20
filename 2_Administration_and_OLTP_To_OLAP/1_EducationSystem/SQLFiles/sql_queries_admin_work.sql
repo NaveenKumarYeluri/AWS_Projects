@@ -514,4 +514,4 @@ ORDER BY
     a.applicant_name;-- R1: 6.2s, R2: 3.2s, R3: 2s, R4: 2s, R5: 2s, R6: 2s
 
 
--- With the above runs it is obvious that Collocated Join + our Sort Key working fine and giving much better performance compared to the other two. So we will stick with this option and drop the other tables. With this our work on optimisation is completed.
+-- With the above runs it is obvious that Collocated Join + our Sort Key working fine and giving much better performance compared to the other two. So we will stick with this option and drop the other tables. With this our work on optimisation is complete.

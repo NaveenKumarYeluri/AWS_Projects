@@ -25,16 +25,24 @@ MANIFEST;
 
 -- Before unloading check counts:
 
-SELECT COUNT(*) FROM aws_project.orders;-- 1,20,00,00,000
-SELECT MAX(order_date) FROM aws_project.orders;-- 2030-12-31
+SELECT
+  COUNT(*)
+FROM aws_project.orders;-- 1,20,00,00,000
+SELECT
+  MAX(order_date)
+FROM aws_project.orders;-- 2030-12-31
 
-SELECT COUNT(*)
+SELECT
+  COUNT(*)
 FROM aws_project.orders
-WHERE order_date < DATEADD(month, -24, TRUNC(SYSDATE));-- 47,76,97,250
+WHERE
+  order_date < DATEADD(month, -24, TRUNC(SYSDATE));-- 47,76,97,250
 
-SELECT COUNT(*)
+SELECT
+  COUNT(*)
 FROM aws_project.orders
-WHERE order_date >= DATEADD(month, -24, TRUNC(SYSDATE));-- 72,23,02,750
+WHERE
+  order_date >= DATEADD(month, -24, TRUNC(SYSDATE));-- 72,23,02,750
 
 SELECT 722302750 + 477697250;-- 1,20,00,00,000
 
@@ -44,7 +52,8 @@ SELECT 722302750 + 477697250;-- 1,20,00,00,000
 UNLOAD ('
   SELECT *
   FROM aws_project.orders
-  WHERE order_date < DATEADD(month, -24, TRUNC(SYSDATE));
+  WHERE
+    order_date < DATEADD(month, -24, TRUNC(SYSDATE));
 ')
 TO 's3://mybuck_name_is/Education_System/Unload_Files_From_Redshift/'
 IAM_ROLE 'IAM_ROLE_WITH_PUT_ACCESS_TO_S3'
@@ -57,9 +66,12 @@ ALLOWOVERWRITE;-- UNLOAD completed, 477697250 record(s) unloaded successfully. T
 
 DELETE
 FROM aws_project.orders
-WHERE order_date < DATEADD(month, -24, TRUNC(SYSDATE));-- Affected rows: 477697250, Took: 44.8s
+WHERE
+  order_date < DATEADD(month, -24, TRUNC(SYSDATE));-- Affected rows: 477697250, Took: 44.8s
 
-SELECT COUNT(*) FROM aws_project.orders;-- 72,23,02,750
+SELECT
+  COUNT(*)
+FROM aws_project.orders;-- 72,23,02,750
 
 -- Dropping table:
 

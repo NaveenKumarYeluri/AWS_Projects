@@ -483,7 +483,8 @@ SELECT
         END AS age,
     applicant_qual_test_score AS qualification_score
 FROM aws_project.applicant
-WHERE applicant_id_sk = 209700;
+WHERE
+    applicant_id_sk = 209700;
 
 /*
 -------------------------------------------------------------------------

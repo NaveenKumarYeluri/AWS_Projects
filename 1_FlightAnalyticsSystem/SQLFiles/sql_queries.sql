@@ -5,8 +5,9 @@ SELECT DISTINCT
     -- distance / speed
     CAST((distance / NULLIF(avg_flight_speed_kmps, 0)) / 60 AS DECIMAL(10,2)) AS flight_duration_mins
 FROM aws_project.Fact_Flight_Transactions
-WHERE distance IS NOT NULL
-AND avg_flight_speed_kmps IS NOT NULL;
+WHERE
+    distance IS NOT NULL
+    AND avg_flight_speed_kmps IS NOT NULL;
 
 
 -- 2)
@@ -78,8 +79,9 @@ WITH stats AS (
         SUM(CAST(avg_flight_speed_kmps AS FLOAT8) * CAST(avg_flight_speed_kmps AS FLOAT8)) AS sum_x2,
         SUM(CAST(distance AS FLOAT8) * CAST(distance AS FLOAT8)) AS sum_y2
     FROM aws_project.Fact_Flight_Transactions
-    WHERE avg_flight_speed_kmps IS NOT NULL
-    AND distance IS NOT NULL
+    WHERE
+        avg_flight_speed_kmps IS NOT NULL
+        AND distance IS NOT NULL
     GROUP BY
         airplane_model
 )
@@ -91,7 +93,8 @@ SELECT
         NULLIF(SQRT((n * sum_x2 - (sum_x * sum_x)) * (n * sum_y2 - (sum_y * sum_y))), 0)
     AS DECIMAL(5,4)) AS correlation_score
 FROM stats
-WHERE total_unique_flights > 50
+WHERE
+    total_unique_flights > 50
 ORDER BY
     correlation_score DESC;
 
@@ -106,8 +109,9 @@ SELECT
     AS DECIMAL(10,2)) AS fule_economy,
     COUNT(DISTINCT flight_id) AS total_flights
 FROM aws_project.Fact_Flight_Transactions
-WHERE distance IS NOT NULL
-AND fuel_consumed_litre IS NOT NULL
+WHERE
+    distance IS NOT NULL
+    AND fuel_consumed_litre IS NOT NULL
 GROUP BY
     airplane_model
 ORDER BY
@@ -124,7 +128,8 @@ WITH total_tickets AS (
     FROM aws_project.Fact_Flight_Transactions AS f
     INNER JOIN Dim_Date AS d
         ON d.date_sk = f.date_fk
-    WHERE f.frequent_flier_status = 1
+    WHERE
+        f.frequent_flier_status = 1
     GROUP BY
         d.year
 ),
@@ -179,8 +184,9 @@ SELECT
     AS DECIMAL(10, 2)
     ) AS avg_rpm_per_km
 FROM aws_project.Fact_Flight_Transactions
-WHERE engine_performance IS NOT NULL
-AND distance IS NOT NULL
+WHERE
+    engine_performance IS NOT NULL
+    AND distance IS NOT NULL
 GROUP BY
     airplane_model;
 ORDER BY
@@ -199,8 +205,9 @@ WITH stats AS (
         SUM(CAST(fuel_consumed_litre AS FLOAT8) * CAST(fuel_consumed_litre AS FLOAT8)) AS sum_x2,
         SUM(CAST(distance AS FLOAT8) * CAST(distance AS FLOAT8)) AS sum_y2
     FROM aws_project.Fact_Flight_Transactions
-    WHERE fuel_consumed_litre IS NOT NULL
-    AND distance IS NOT NULL
+    WHERE
+        fuel_consumed_litre IS NOT NULL
+        AND distance IS NOT NULL
 )
 SELECT
     CAST(
@@ -216,7 +223,8 @@ SELECT
     passenger_country,
     COUNT(ticket_no) as tickets_per_country
 FROM aws_project.Fact_Flight_Transactions
-WHERE passenger_country IS NOT NULL
+WHERE
+    passenger_country IS NOT NULL
 GROUP BY
     passenger_country
 ORDER BY
@@ -231,7 +239,8 @@ WITH age_calculation AS (
         ticket_no,
         DATEDIFF('year', passenger_dob, CURRENT_DATE) AS age
     FROM aws_project.Fact_Flight_Transactions
-    WHERE passenger_dob IS NOT NULL
+    WHERE
+        passenger_dob IS NOT NULL
 )
 SELECT
     CASE
@@ -256,8 +265,9 @@ WITH age_calculation AS (
         passenger_flight_class,
         DATEDIFF('year', passenger_dob, CURRENT_DATE) AS age
     FROM aws_project.Fact_Flight_Transactions
-    WHERE passenger_flight_class IS NOT NULL
-    AND passenger_dob IS NOT NULL
+    WHERE
+        passenger_flight_class IS NOT NULL
+        AND passenger_dob IS NOT NULL
 ),
 create_age_groups AS (
     SELECT
@@ -306,9 +316,10 @@ SELECT
     CAST(AVG(flight_cost) AS DECIMAL(10, 2)) AS avg_route_cost,
     COUNT(ticket_no) AS total_tickets_sold
 FROM aws_project.Fact_Flight_Transactions
-WHERE flight_cost IS NOT NULL
-AND origin_airport IS NOT NULL
-AND destination_airport IS NOT NULL
+WHERE
+    flight_cost IS NOT NULL
+    AND origin_airport IS NOT NULL
+    AND destination_airport IS NOT NULL
 GROUP BY
     origin_airport,
     destination_airport
@@ -326,9 +337,10 @@ SELECT
 FROM aws_project.Fact_Flight_Transactions AS f
 INNER JOIN aws_project.Dim_Date AS d
     ON d.date_sk = f.date_fk
-WHERE f.fuel_consumed_litre IS NOT NULL
-AND d.calendar_year IS NOT NULL
-AND d.calendar_month IS NOT NULL
+WHERE
+    f.fuel_consumed_litre IS NOT NULL
+    AND d.calendar_year IS NOT NULL
+    AND d.calendar_month IS NOT NULL
 GROUP BY
     d.calendar_year,
     d.calendar_month
@@ -342,8 +354,9 @@ SELECT
     EXTRACT(MONTH FROM travel_date) AS calendar_month,
     CAST(AVG(fuel_consumed_litre) AS DECIMAL(10, 2)) AS avg_fuel_per_month
 FROM aws_project.Fact_Flight_Transactions
-WHERE fuel_consumed_litre IS NOT NULL
-  AND travel_date IS NOT NULL
+WHERE
+    fuel_consumed_litre IS NOT NULL
+    AND travel_date IS NOT NULL
 GROUP BY
     EXTRACT(YEAR FROM travel_date),
     EXTRACT(MONTH FROM travel_date)
@@ -359,9 +372,10 @@ SELECT
     destination_airport,
     MAX(turbulence) AS max_turbulence
 FROM aws_project.Fact_Flight_Transactions
-WHERE turbulence IS NOT NULL
-AND origin_airport IS NOT NULL
-AND destination_airport IS NOT NULL
+WHERE
+    turbulence IS NOT NULL
+    AND origin_airport IS NOT NULL
+    AND destination_airport IS NOT NULL
 GROUP BY
     origin_airport,
     destination_airport
@@ -382,8 +396,9 @@ WITH landing_flights AS (
             ORDER BY COUNT(flight_id) DESC
         ) AS land_rank
     FROM aws_project.Fact_Flight_Transactions
-    WHERE destination_airport IS NOT NULL
-    AND travel_date IS NOT NULL
+    WHERE
+        destination_airport IS NOT NULL
+        AND travel_date IS NOT NULL
     GROUP BY
         destination_airport,
         EXTRACT(YEAR FROM travel_date)
@@ -393,8 +408,10 @@ SELECT
     destination_airport AS busiest_airport,
     total_landings
 FROM landing_flights
-WHERE land_rank = 1
-ORDER BY travel_year ASC;
+WHERE
+    land_rank = 1
+ORDER BY
+    travel_year ASC;
 
 
 -- 20)
@@ -405,8 +422,9 @@ WITH All_Airport_Movements AS (
         EXTRACT(YEAR FROM departure_time) AS movement_year,
         flight_id
     FROM aws_project.Fact_Flight_Transactions
-    WHERE origin_airport IS NOT NULL
-      AND departure_time IS NOT NULL
+    WHERE
+        origin_airport IS NOT NULL
+        AND departure_time IS NOT NULL
 
     UNION ALL
 
@@ -415,8 +433,9 @@ WITH All_Airport_Movements AS (
         EXTRACT(YEAR FROM travel_date) AS movement_year,
         flight_id
     FROM aws_project.Fact_Flight_Transactions
-    WHERE destination_airport IS NOT NULL
-      AND travel_date IS NOT NULL
+    WHERE
+        destination_airport IS NOT NULL
+        AND travel_date IS NOT NULL
 ),
 Yearly_Rankings AS (
     SELECT
@@ -437,6 +456,7 @@ SELECT
     airport AS busiest_airport,
     total_movements
 FROM Yearly_Rankings
-WHERE traffic_rank = 1
+WHERE
+    traffic_rank = 1
 ORDER BY
     movement_year ASC;

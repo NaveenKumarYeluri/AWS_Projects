@@ -1,8 +1,12 @@
 -- These queries are for Serverless as our DWH is based on Serverless. Provisioned cluster might have different tables.
 
 -- Total Records
-SELECT COUNT(*) FROM aws_project.applicant;--7,09,99,980
-SELECT COUNT(*) FROM aws_project.institute;--5,00,000
+SELECT
+    COUNT(*)
+FROM aws_project.applicant;--7,09,99,980
+SELECT
+    COUNT(*)
+FROM aws_project.institute;--5,00,000
 
 --
 ANALYZE aws_project.applicant;
@@ -14,13 +18,14 @@ ANALYZE aws_project.institute;
 SELECT
     schema AS table_schema,
     "table" AS table_name,
-    size AS total_megabytes,
+    "size"" AS total_megabytes,
     tbl_rows AS total_rows
 FROM svv_table_info
 WHERE
-table_schema = 'aws_project'
-AND table_name IN ('applicant', 'institute')-- 8607 MB (7,09,99,980), 3584 MB (5,00,000)
-ORDER BY size DESC;
+    table_schema = 'aws_project'
+    AND table_name IN ('applicant', 'institute')-- 8607 MB (7,09,99,980), 3584 MB (5,00,000)
+ORDER BY
+    "size" DESC;
 
 
 
@@ -47,9 +52,10 @@ SELECT
     pct_used
 FROM svv_table_info
 WHERE
-table_schema = 'aws_project'
-AND table_name IN ('applicant', 'institute')
-ORDER BY skew_rows DESC;
+    table_schema = 'aws_project'
+    AND table_name IN ('applicant', 'institute')
+ORDER BY
+    skew_rows DESC;
 
 
 
@@ -65,9 +71,10 @@ SELECT
     empty
 FROM svv_table_info
 WHERE
-table_schema = 'aws_project'
-AND table_name IN ('applicant', 'institute')
-ORDER BY skew_rows DESC;
+    table_schema = 'aws_project'
+    AND table_name IN ('applicant', 'institute')
+ORDER BY
+    skew_rows DESC;
 
 
 
@@ -81,8 +88,9 @@ SELECT
     encoding
 FROM pg_table_def
 WHERE
-tablename IN ('applicant', 'institute')
-ORDER BY tablename, "column";
+    tablename IN ('applicant', 'institute')
+ORDER BY
+    tablename, "column";
 
 
 
@@ -97,7 +105,8 @@ SELECT
     start_time,
     end_time
 FROM sys_load_history
-ORDER BY start_time DESC;
+ORDER BY
+    start_time DESC;
 
 
 
@@ -113,8 +122,10 @@ SELECT
     DATEDIFF(microsecond, start_time, end_time) / 1000000.0 AS duration_seconds,
     *
 FROM sys_query_history
-WHERE query_text ILIKE '%COPY aws_project.applicant%'
-ORDER BY start_time DESC
+WHERE
+    query_text ILIKE '%COPY aws_project.applicant%'
+ORDER BY
+    start_time DESC
 LIMIT 20;
 
 
@@ -123,11 +134,17 @@ LIMIT 20;
 -- 1) We will make sure only one name is associated with one ID. This was reason why CTEs were used on almost all the Business Statements.
 
 
-SELECT COUNT(*) FROM aws_project.institute; -- 5,00,000 records
+SELECT
+    COUNT(*)
+FROM aws_project.institute; -- 5,00,000 records
 
 
-select DISTINCT institute_name from aws_project.institute; -- 83 names.
-select DISTINCT institute_id_sk from aws_project.institute; -- 1,00,818 IDs
+SELECT
+    DISTINCT institute_name
+FROM aws_project.institute; -- 83 names.
+SELECT
+    DISTINCT institute_id_sk
+FROM aws_project.institute; -- 1,00,818 IDs
 -- There is a huge variation b/w the above 2 numbers which itself proves that we have bad data. How is it even possible to have 400+ IDs for a single name?
 
 
@@ -140,13 +157,16 @@ CREATE TABLE aws_project.stg_institute AS
 ); -- Obviously we delete using other methods as well.
 
 
-SELECT COUNT(*) FROM aws_project.stg_institute; -- We will have original count of 5,00,000 records.
+SELECT
+    COUNT(*)
+FROM aws_project.stg_institute; -- We will have original count of 5,00,000 records.
 
 
 TRUNCATE TABLE aws_project.institute; -- We will remove existing data before de-duplication.
 
 
-INSERT INTO aws_project.institute
+INSERT INTO
+    aws_project.institute
 SELECT
     institute_id_sk,
     institute_name,
@@ -160,10 +180,13 @@ SELECT
     declined_no_of_student_pct,
     accepted_no_of_student_pct
 FROM aws_project.stg_institute
-WHERE rnk = 1; -- This number makes sure we have only one name for each ID.
+WHERE
+    rnk = 1; -- This number makes sure we have only one name for each ID.
 
 
-SELECT COUNT(*) FROM aws_project.institute;--1,00,818. Now our institute table is clean.
+SELECT
+    COUNT(*)
+FROM aws_project.institute;--1,00,818. Now our institute table is clean.
 
 
 DROP TABLE aws_project.stg_institute; -- This is no longer needed. Save space.
@@ -172,19 +195,25 @@ DROP TABLE aws_project.stg_institute; -- This is no longer needed. Save space.
 -- 2) We will work on applicant table.
 
 -- We ran below queries on DuckDB which is local to my system, which also means data duplication, which we did in Redshift, has not happened here.
-SELECT COUNT(*) FROM aws_project.applicant; -- 7,09,99,980
+SELECT
+    COUNT(*)
+FROM aws_project.applicant; -- 7,09,99,980
 
-SELECT COUNT(*)-- Count of records in applicant table which have no corresponding match in institute table. Means bad data.
+SELECT
+    COUNT(*)-- Count of records in applicant table which have no corresponding match in institute table. Means bad data.
 FROM aws_project.applicant AS a
 LEFT OUTER JOIN aws_project.institute AS i
     ON i.institute_id_sk = a.institute_id_fk
-WHERE i.institute_name IS NULL; -- 81,54,145
+WHERE
+    i.institute_name IS NULL; -- 81,54,145
 
-SELECT COUNT(*)-- Count of records in applicant table which have proper match in institute table.
+SELECT
+    COUNT(*)-- Count of records in applicant table which have proper match in institute table.
 FROM aws_project.applicant AS a
 LEFT OUTER JOIN aws_project.institute AS i
     ON i.institute_id_sk = a.institute_id_fk
-WHERE i.institute_name IS NOT NULL; -- 6,28,45,835
+WHERE
+    i.institute_name IS NOT NULL; -- 6,28,45,835
 -- 81,54,145 + 6,28,45,835 = 7,09,99,980
 
 
@@ -192,26 +221,47 @@ WHERE i.institute_name IS NOT NULL; -- 6,28,45,835
 
 DELETE FROM aws_project.applicant
 WHERE NOT EXISTS (
-    SELECT 1
+    SELECT
+        1
     FROM aws_project.institute
-    WHERE institute_id_sk = TRIM(applicant.institute_id_fk) -- Seems Redshift is not allowing to delete unless I have a no-use function here.
+    WHERE
+        institute_id_sk = TRIM(applicant.institute_id_fk) -- Seems Redshift is not allowing to delete unless I have a no-use function here.
     -- FYI: We have Foreign Key here and Redshift is assuming the data is good. Obviously we have to prove it wrong.
 ); -- Deleted records count: 81,54,145
 
 
-SELECT COUNT(*) FROM aws_project.applicant; -- 6,28,45,835
+SELECT
+    COUNT(*)
+FROM aws_project.applicant; -- 6,28,45,835
 -- We completed our first step. Now we will go after duplicates as we did this intentionally.
 
 -- Step 2: Remove duplicates.
 
-SELECT COUNT(DISTINCT applicant_id_sk) FROM aws_project.applicant; -- 1,18,64,129
-SELECT COUNT(applicant_id_sk) FROM aws_project.applicant; -- 6,28,45,835 same as above
+SELECT
+    COUNT(DISTINCT applicant_id_sk)
+FROM aws_project.applicant; -- 1,18,64,129
+
+SELECT
+    COUNT(applicant_id_sk)
+FROM aws_project.applicant; -- 6,28,45,835 same as above
 
 
-SELECT applicant_id_sk, applicant_name, applicant_gender, applicant_country, applicant_dob, COUNT(*)
+SELECT
+    applicant_id_sk,
+    applicant_name,
+    applicant_gender,
+    applicant_country,
+    applicant_dob,
+    COUNT(*)
 FROM aws_project.applicant
-GROUP BY applicant_id_sk, applicant_name, applicant_gender, applicant_country, applicant_dob
-HAVING COUNT(*) > 1; -- It is showing 5 duplicate record for each record. Which is obviously as per our Python script.
+GROUP BY
+    applicant_id_sk,
+    applicant_name,
+    applicant_gender,
+    applicant_country,
+    applicant_dob
+HAVING
+    COUNT(*) > 1; -- It is showing 5 duplicate record for each record. Which is obviously as per our Python script.
 
 CREATE TABLE aws_project.stg_applicant AS
 (
@@ -219,12 +269,18 @@ CREATE TABLE aws_project.stg_applicant AS
     FROM aws_project.applicant
 ); -- Took: 1m 4.3s
 
-SELECT COUNT(*) FROM aws_project.stg_applicant; -- 6,28,45,835 same as above
-SELECT * FROM aws_project.stg_applicant LIMIT 5;
+SELECT
+    COUNT(*)
+FROM aws_project.stg_applicant; -- 6,28,45,835 same as above
+SELECT
+    *
+FROM aws_project.stg_applicant
+LIMIT 5;
 
 TRUNCATE TABLE aws_project.applicant; -- Took: 230ms
 
-INSERT INTO aws_project.applicant
+INSERT INTO
+    aws_project.applicant
 SELECT
     applicant_id_sk,
     applicant_name,
@@ -241,10 +297,15 @@ SELECT
     institute_id_fk,
     course_name
 FROM aws_project.stg_applicant
-WHERE rnk = 1; -- Took: 19.4s, 1,25,69,167
+WHERE
+    rnk = 1; -- Took: 19.4s, 1,25,69,167
 
-SELECT COUNT(DISTINCT applicant_id_sk) FROM aws_project.applicant; -- 1,18,64,129 same as earlier
-SELECT COUNT(applicant_id_sk) FROM aws_project.applicant; -- 1,25,69,167 same as above
+SELECT
+    COUNT(DISTINCT applicant_id_sk)
+FROM aws_project.applicant; -- 1,18,64,129 same as earlier
+SELECT
+    COUNT(applicant_id_sk)
+FROM aws_project.applicant; -- 1,25,69,167 same as above
 -- Finally the data we duplicated has been removed. We will check tables size after dropping stg table.
 
 DROP TABLE aws_project.stg_applicant;-- Took: 221ms
@@ -263,9 +324,10 @@ SELECT
     "size" as size_mb -- applicant: 4352 (improvement, size reduced), institute: 3584 (Seems same as earlier)
 FROM svv_table_info
 WHERE
-table_schema = 'aws_project'
-AND table_name IN ('applicant', 'institute')
-ORDER BY skew_rows DESC;
+    table_schema = 'aws_project'
+    AND table_name IN ('applicant', 'institute')
+ORDER BY
+    skew_rows DESC;
 
 
 SELECT
@@ -277,9 +339,10 @@ SELECT
     empty
 FROM svv_table_info
 WHERE
-table_schema = 'aws_project'
-AND table_name IN ('applicant', 'institute')
-ORDER BY skew_rows DESC;
+    table_schema = 'aws_project'
+    AND table_name IN ('applicant', 'institute')
+ORDER BY
+    skew_rows DESC;
 
 
 ANALYZE aws_project.applicant;-- Took: 2.2s
@@ -309,8 +372,9 @@ SELECT
         ELSE 0
     END AS records_per_mb
 FROM svv_table_info
-WHERE "schema" = 'aws_project'
-  AND "table" IN ('applicant', 'institute');
+WHERE
+    "schema" = 'aws_project'
+    AND "table" IN ('applicant', 'institute');
 -- applicant: 2888.1357 (Size: 4352 MB)
 -- institute: 28.13 (Size: 3584) It seems 1MB blocks do have empty space.
 
@@ -342,8 +406,11 @@ DISTKEY (institute_id_fk)
 SORTKEY (institute_id_fk);-- Took: 12.15429700
 
 
-INSERT INTO aws_project.applicant_optimized
-SELECT * FROM aws_project.applicant;-- Took: 1m 23.3s
+INSERT INTO
+    aws_project.applicant_optimized
+SELECT
+    *
+FROM aws_project.applicant;-- Took: 1m 23.3s
 
 
 ANALYSE aws_project.applicant_optimized; --3.2s
@@ -370,8 +437,11 @@ DISTSTYLE KEY
 DISTKEY (institute_id_fk); -- Let it be AUTO sort.
 
 -- Load your clean data into it
-INSERT INTO aws_project.applicant_optimized_nosort
-SELECT * FROM aws_project.applicant;
+INSERT INTO
+    aws_project.applicant_optimized_nosort
+SELECT
+    *
+FROM aws_project.applicant;
 
 ANALYSE aws_project.applicant_optimized_nosort;
 

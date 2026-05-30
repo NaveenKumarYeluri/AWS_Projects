@@ -1,0 +1,95 @@
+{
+    "entries": [
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_7.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 1441774375
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_12.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 2161438295
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_11.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 2161496406
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_3.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 216155136
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_1.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 73675315
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_4.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 289829044
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_6.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 1441768827
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_5.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 722124813
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_13.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 2161493224
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_2.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 144916635
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_9.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 2883589700
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_10.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 2161519225
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/order_fulfillment_data_8.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 2161467136
+            }
+        }
+    ]
+}

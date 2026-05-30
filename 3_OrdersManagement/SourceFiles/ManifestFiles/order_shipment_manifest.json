@@ -1,0 +1,95 @@
+{
+    "entries": [
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_4.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 165677636
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_10.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 1265043656
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_3.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 123947219
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_13.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 1265049189
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_7.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 840455473
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_9.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 1690766021
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_1.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 40898668
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_11.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 1265070012
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_12.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 1265051114
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_6.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 840466423
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_2.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 82331020
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_8.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 1265057740
+            }
+        },
+        {
+            "url": "s3://mybuck_name_is/Order_Management_System/order_shipment_parquet/order_shipment_data_5.parquet",
+            "mandatory": true,
+            "meta": {
+                "content_length": 417636880
+            }
+        }
+    ]
+}

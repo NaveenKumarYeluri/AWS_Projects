@@ -79,5 +79,12 @@ MANIFEST;--Took: 7m 52s
 -- Load into table 'order_transaction_stg' completed, 250000000 record(s) loaded successfully.
 
 
-SELECT COUNT(*) FROM aws_project.order_transaction_stg;-- 25,00,00,000
-SELECT * FROM aws_project.order_transaction_stg LIMIT 2;
+SELECT
+    COUNT(*)
+FROM aws_project.order_transaction_stg;-- 25,00,00,000
+
+SELECT
+    *
+FROM aws_project.order_transaction_stg
+LIMIT
+    2;

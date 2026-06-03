@@ -4,8 +4,9 @@
 
 SET enable_result_cache_for_session TO off;
 
+
 -- Q1:
--- --- DEFAULT VERSION ---
+-- RUN AGAINST DEFAULT VERSION:
 DROP TABLE IF EXISTS aws_project.temp_customer_order_history_def;
 CREATE TABLE aws_project.temp_customer_order_history_def AS
 SELECT
@@ -21,9 +22,10 @@ ORDER BY
     customer_id,
     order_date;-- Took: 2m 33.4s, 2m 18.4s, 1m 9.1s, 1m 11.3s, 1m 10.3s
 -- Next Day (2nd June) Runs: 2m 19s, 1m 19.9s, 1m 19.7s, 1m 17.9s, 1m 20s
+-- Next Day (3rd June): 1m 5s, 1m 5s, 1m 5.2s
 
 
--- --- OPTIMIZED VERSION ---
+-- RUN AGAINST OPTIMIZED VERSION:
 DROP TABLE IF EXISTS aws_project.temp_customer_order_history_opt;
 CREATE TABLE aws_project.temp_customer_order_history_opt AS
 SELECT
@@ -39,10 +41,12 @@ ORDER BY
     customer_id,
     order_date;-- Took: 1m 45.8s, 1m 6.8s, 1m 10.1s, 1m 8.3s, 1m 7.9s
 -- Next Day (2nd June) Runs: 1m 31.9s, 1m 18.2s, 1m 17.4s, 1m 17.5s, 1m 8.4s
+-- Next Day (3rd June): 1m 10.4s, 1m 12.8s, 1m 11.1s
+
 
 
 -- Q2:
--- --- DEFAULT VERSION ---
+-- RUN AGAINST DEFAULT VERSION:
 DROP TABLE IF EXISTS aws_project.temp_discount_credit_def;
 CREATE TABLE aws_project.temp_discount_credit_def AS
 SELECT
@@ -56,9 +60,10 @@ GROUP BY
 ORDER BY
     customer_credit_rating DESC;-- Took: 17s, 4.8s, 5s, 4.6s, 4.9s
 -- Next Day (2nd June) Runs: 10.9s, 7.8s, 7.4s, 7.4s, 4.5s
+-- Next Day (3rd June): 4.1s, 4.4s, 4.6s
 
 
--- --- OPTIMIZED VERSION ---
+-- RUN AGAINST OPTIMIZED VERSION:
 DROP TABLE IF EXISTS aws_project.temp_discount_credit_opt;
 CREATE TABLE aws_project.temp_discount_credit_opt AS
 SELECT
@@ -72,11 +77,12 @@ GROUP BY
 ORDER BY
     customer_credit_rating DESC;-- Took: 22.4s, 4.7s, 5.1s, 5s, 5.3s
 -- Next Day (2nd June) Runs: 13.1s, 7.7s, 7.5s, 7.5s, 4.7s
+-- Next Day (3rd June): 4.8s, 4.2s, 4.5s
 
 
 
 -- Q3:
--- --- DEFAULT VERSION ---
+-- RUN AGAINST DEFAULT VERSION:
 SELECT
     customer_country,
     COUNT(order_id) AS total_orders
@@ -91,9 +97,10 @@ ORDER BY
 LIMIT
     1;-- Took: 21596 ms, 8330 ms, 6408 ms, 6824 ms, 6993 ms
 -- Next Day (2nd June) Runs: 12783 ms, 10656 ms, 8183 ms, 8181 ms, 8177 ms
+-- Next Day (3rd June): 5539 ms, 5373 ms, 5370 ms
 
 
--- --- OPTIMIZED VERSION ---
+-- RUN AGAINST OPTIMIZED VERSION:
 SELECT
     customer_country,
     COUNT(order_id) AS total_orders
@@ -108,6 +115,7 @@ ORDER BY
 LIMIT
     1;-- Took: 13975 ms, 434 ms, 254 ms, 270 ms, 288 ms
 -- Next Day (2nd June) Runs: 1289 ms, 939 ms, 968 ms, 975 ms, 271 ms
+-- Next Day (3rd June): 396 ms, 193 ms, 190 ms
 
 
 -- As of today for Q1, both versions performing well with similar times.
@@ -127,6 +135,7 @@ SELECT
 FROM aws_project.order_transaction_def
 GROUP BY
     customer_country;-- Took: 4.9s, 5.6s, 5.5s, 5.5s
+-- Next Day (3rd June): 5.6s, 5.6s, 5.5s
 
 
 -- --- OPTIMIZED VERSION ---
@@ -138,6 +147,7 @@ SELECT
 FROM aws_project.order_transaction_opt
 GROUP BY
     customer_country;-- Took: 7.9s, 5.5s, 5.4s, 5.7s
+-- Next Day (3rd June): 5.7s, 5.7s, 5.6s
 
 
 
@@ -155,6 +165,7 @@ WHERE
     t.customer_premium_flag = TRUE
 GROUP BY
     t.customer_state;-- Took: 1m 13.1s, 57.4s, 57.3s, 56.7s
+-- Next Day (3rd June): 1m 1.7s, 1m 2s, 1m 1.7s
 
 
 -- --- OPTIMIZED VERSION ---
@@ -170,6 +181,7 @@ WHERE
     t.customer_premium_flag = TRUE
 GROUP BY
     t.customer_state;-- Took: 1m 20s, 1m 1s, 1m 1.3s, 1m 1.4s
+-- Next Day (3rd June): 1m 3.1s, 1m 3.3s, 1m 2.8s
 
 
 
@@ -188,6 +200,7 @@ JOIN aws_project.order_shipment_def s
 GROUP BY
     s.shipment_from_city,
     s.shipment_to_city;-- Took: 2m 2.7s, 1m 59.2s, 1m 58s, 1m 58.2s
+-- Next Day (3rd June): 2m 1.6s, 1m 59.6s, 1m 59.8s
 
 
 -- --- OPTIMIZED VERSION ---
@@ -204,6 +217,7 @@ JOIN aws_project.order_shipment_opt s
 GROUP BY
     s.shipment_from_city,
     s.shipment_to_city;-- Took: 2m 11.3s, 2m 0.5s, 1m 59.9s, 2m 0.5s
+-- Next Day (3rd June): 1m 58.7s, 1m 58.9s, 1m 59.2s
 
 
 
@@ -216,6 +230,7 @@ SELECT
 FROM aws_project.order_transaction_def t
 JOIN aws_project.order_shipment_def s
     ON t.order_id = s.order_id;-- Took: 1m 18.7s, 1m 17.5s, 1m 17.3s, 1m 16.9s
+-- Next Day (3rd June): 4m 11.6s, 1m 13.7s, 1m 14.2s
 
 
 -- --- OPTIMIZED VERSION ---
@@ -226,6 +241,7 @@ SELECT
 FROM aws_project.order_transaction_opt t
 JOIN aws_project.order_shipment_opt s
     ON t.order_id = s.order_id;-- Took: 1m 15.1s, 1m 14s, 1m 14.6s, 1m 13.8s
+-- Next Day (3rd June): 1m 53.3s, 1m 33.9s, 1m 33.2s
 
 
 
@@ -243,6 +259,7 @@ JOIN aws_project.order_shipment_def s
     ON t.order_id = s.order_id
 WHERE
     t.customer_city != s.shipment_from_city;-- Took: 2m 39.1s, 2m 31.9s, 2m 31.9s, 2m 31.8s
+-- Next Day (3rd June): 3m 19.7s, 2m 48.6s, 2m 49.2s
 
 
 -- --- OPTIMIZED VERSION ---
@@ -258,6 +275,7 @@ JOIN aws_project.order_shipment_opt s
     ON t.order_id = s.order_id
 WHERE
     t.customer_city != s.shipment_from_city;-- Took:  2m 52.9s, 2m 47.1s, 2m 47.1s, 2m 46.9s
+-- Next Day (3rd June): 2m 52.4s, 2m 28.2s, 2m 27.7s
 
 
 
@@ -279,6 +297,7 @@ JOIN aws_project.order_shipment_def s
     ON t.order_id = s.order_id
 GROUP BY
     1;-- Took: 1m 46.1s, 1m 46.1s, 1m 45.7s, 1m 46s
+-- Next Day (3rd June): 2m 9.3s, 1m 32.2s, 1m 31.6s
 
 
 -- --- OPTIMIZED VERSION ---
@@ -298,6 +317,7 @@ JOIN aws_project.order_shipment_opt s
     ON t.order_id = s.order_id
 GROUP BY
     1;-- Took: 1m 29.3s, 1m 29.2s, 1m 29.2s, 1m 29.2s
+-- Next Day (3rd June): 2m 16.4s, 1m 23.6s, 1m 23.2s
 
 
 
@@ -317,6 +337,7 @@ ORDER BY
     premium_customer_count DESC
 LIMIT
     20;-- Took: 8.4s, 7.8s, 7.7s, 8.7s
+-- Next Day (3rd June): 26s, 8s, 8s
 
 
 -- --- OPTIMIZED VERSION ---
@@ -334,3 +355,5 @@ ORDER BY
     premium_customer_count DESC
 LIMIT
     20;-- Took: 8s, 7.7s, 7.6s, 7.3s
+-- Next Day (3rd June): 1m 20.8s, 8s, 8.2s
+

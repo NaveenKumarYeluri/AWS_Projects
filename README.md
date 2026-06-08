@@ -66,7 +66,7 @@ This massive, multi-part project demonstrates enterprise-grade physical database
   * **Architecture B (Data Lakehouse):** AWS DMS extraction to S3, followed by distributed PySpark (AWS Glue) in-memory deduplication, writing to Apache Iceberg formats, and queried via Redshift Spectrum for zero-maintenance historical storage.
   
 
-### 3. Orders Management System 📦
+### 3. Performance Tuning 🛠️
 In-progress
 
 ---
@@ -89,6 +89,6 @@ In-progress
 ```text
 ├── 1_FlightAnalyticsSystem/                # Python scripts, JSON, CSV parsers, and SQL DDL/DML
 ├── 2_Administration_and_OLTP_To_OLAP/      # Ed. System tuning, 55GB Orders tiering, and Lakehouse
-├── 3_OrdersManagement/                     # Performance tuning scripts, indexes, and optimized queries
+├── 3_Performance_Tuning/                   # Performance tuning, optimized queries, Data Modeling
 └── README.md                               # Root portfolio documentation
 ```

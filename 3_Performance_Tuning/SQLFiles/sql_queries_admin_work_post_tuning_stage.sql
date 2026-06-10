@@ -63,3 +63,50 @@ JOIN aws_project.order_transaction_opt t
 -- 2. Swap it
 DROP TABLE aws_project.order_shipment_opt;
 ALTER TABLE aws_project.order_shipment_opt_fixed RENAME TO order_shipment_opt;
+
+
+
+-- Get Query ID
+SELECT
+    query_id,
+    query_text,
+    start_time,
+    execution_time
+FROM sys_query_history
+WHERE
+    query_text LIKE '%temp_avg_lead_time_opt%'
+ORDER BY
+    start_time DESC;
+
+
+
+-- Check
+SELECT
+    query_id,
+    stream_id,
+    segment_id,
+    step_id,
+    step_name,
+    duration, -- Execution time for this specific step in microseconds
+    table_name
+FROM sys_query_detail
+WHERE
+    query_id = 23585650
+ORDER BY
+    stream_id,
+    segment_id,
+    step_id;
+
+
+
+-- Check
+SELECT
+    query_id,
+    query_text,
+    start_time,
+    execution_time
+FROM sys_query_history
+WHERE
+    query_id = 23585650
+ORDER BY
+    start_time DESC;

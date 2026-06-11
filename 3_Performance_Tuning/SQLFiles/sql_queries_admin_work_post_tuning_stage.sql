@@ -110,3 +110,52 @@ WHERE
     query_id = 23585650
 ORDER BY
     start_time DESC;
+
+
+
+/*
+
+-- Setting Priority
+-- P1: I will keep Business Satatements that produce very small and concise result set into this category. Instant answers + Live.
+-- P2: Statements that will be part of reports but needs massive processing and produces lots of data. These might be seen once or twice per day.
+-- P3: Audit statements where Business users might not need on a minute-by-minute basis. These are multi purpose statements.
+
+
+So accordingly we have following groups.
+
+P1: Q2, Q3, Q4, Q10
+P2: Q1, Q5, Q7, Q9
+P3: Q6, Q8
+
+*/
+
+
+
+/*
+
+-- Setting SLAs
+-- As given in project, I will be keeping 2x of average runtime, while setting SLA.
+
+Accordingly,
+
+Q1 (Order History 2-8 Years): Average ~1m 02s (62s). 2x = 124s. Final SLA: < 2 Minutes 5 Seconds.
+
+Q2 (Discount by Credit): Average ~4.5s. 2x = 9.0s. Final SLA: < 10 Seconds.
+
+Q3 (Top Country): Average ~0.15s. 2x = 0.3s. Final SLA: < 1 Second.
+
+Q4 (Avg Credit by Country): Average ~4.5s. 2x = 9.0s. Final SLA: < 10 Seconds.
+
+Q5 (Premium Avg Ship Time): Average ~1m 01s (61s). 2x = 122s. Final SLA: < 2 Minutes 5 Seconds.
+
+Q6 (City-to-City Matrix): Average ~1m 59s (119s). 2x = 238s. Final SLA: < 4 Minutes.
+
+Q7 (Global Avg Lead Time): Average ~1m 14s (74s). 2x = 148s. Final SLA: < 2 Minutes 30 Seconds.
+
+Q8 (Mismatch Audit): Average ~1m 52s (112s). 2x = 224s. Final SLA: < 3 Minutes 45 Seconds.
+
+Q9 (Lead Time by Amount): Average ~1m 29s (89s). 2x = 178s. Final SLA: < 3 Minutes.
+
+Q10 (Top Premium States): Average ~8.0s. 2x = 16.0s. Final SLA: < 20 Seconds.
+
+*/

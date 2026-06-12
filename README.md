@@ -67,7 +67,7 @@ This massive, multi-part project demonstrates enterprise-grade physical database
   
 
 ### 3. Performance Tuning 🛠️
-In-progress
+**Focus:** *Optimization, Setting SLAs and Query Priority, Data Modeling*
 
 ---
 

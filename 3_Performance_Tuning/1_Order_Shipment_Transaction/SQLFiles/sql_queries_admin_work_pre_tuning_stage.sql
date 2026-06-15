@@ -50,11 +50,12 @@ ORDER BY
     skew_rows DESC;
 
 
-table_name	unsorted	stats_off	empty
-order_shipment_stg	NULL	0	0
-order_fulfillment_stg	NULL	0	0
-order_transaction_stg	NULL	0	0
-
+/*
+table_name              unsorted    stats_off   empty
+order_shipment_stg      NULL        0           0
+order_fulfillment_stg   NULL        0           0
+order_transaction_stg   NULL        0           0
+*/
 
 
 -- Check compression.
@@ -103,7 +104,7 @@ SELECT
 FROM pg_table_def
 WHERE
     schemaname = 'aws_project'
-    AND tablename IN ('order_fulfillment_stg', 'order_shipment_stg'
+    AND tablename IN ('order_shipment_stg'
     , 'order_transaction_stg')
 ORDER BY
     tablename;

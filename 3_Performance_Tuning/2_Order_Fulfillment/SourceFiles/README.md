@@ -41,13 +41,13 @@ Instead of uploading CSV files, format has been changed to `PARQUET` file so loa
 
 * **Unzip files**: As we have limit in Colab each zip file will be processed seperately.
   ```bash
-  !unzip /content/drive/MyDrive/Data_Engg_Vol_1_2/OrderManagementSystem/order_shipment.zip -d /content/
+  !unzip /content/drive/MyDrive/Data_Engg_Vol_1_2/OrderManagementSystem/order_fulfillment.zip -d /content/
   ```
   
 * **Remove unwanted things**: Zip files contain some hidden files and unwanted folder, hence removing them.
   ```bash
   !rm -rf /content/__MACOSX/
-  !rm -rf /content/order_shipment/._*
+  !rm -rf /content/order_fulfillment/._*
   ```
 
 *   **Taking 5MB copy for GitHub**: We will be sharing only a portion of the files.
@@ -55,8 +55,8 @@ Instead of uploading CSV files, format has been changed to `PARQUET` file so loa
     import os
     import pandas as pd
     
-    input_file = '/content/order_shipment/order_shipment_data_1.csv'
-    output_file = '/content/order_shipment/order_shipment_data_1_subset_5mb.csv'
+    input_file = '/content/order_fulfillment/order_fulfillment_data_1.csv'
+    output_file = '/content/order_fulfillment/order_fulfillment_data_1_subset_5mb.csv'
     
     # Estimate rows for 5MB
     target_size_bytes = 5 * 1024 * 1024
@@ -88,9 +88,9 @@ Instead of uploading CSV files, format has been changed to `PARQUET` file so loa
     import pyarrow.parquet as pq
 
     # Define paths
-    local_csv_dir = '/content/order_shipment/'
-    local_parquet_dir = '/content/order_shipment_parquet/'
-    s3_path = 's3://mybuck_name_is/Order_Management_System/order_shipment_parquet/'
+    local_csv_dir = '/content/order_fulfillment/'
+    local_parquet_dir = '/content/order_fulfillment_parquet/'
+    s3_path = 's3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/'
 
     os.makedirs(local_parquet_dir, exist_ok=True)
 
@@ -143,8 +143,8 @@ After file conversion, manifest file is generation, we can load files to S3.
     os.environ['AWS_DEFAULT_REGION'] = 'AWS_DEFAULT_REGION'
 
     # Re-check local parquet files to get sizes for manifest meta
-    local_parquet_dir = '/content/order_shipment_parquet/'
-    s3_path = 's3://mybuck_name_is/Order_Management_System/order_shipment_parquet/'
+    local_parquet_dir = '/content/order_fulfillment_parquet/'
+    s3_path = 's3://mybuck_name_is/Order_Management_System/order_fulfillment_parquet/'
 
     if not os.path.exists(local_parquet_dir):
         print('Warning: local_parquet_dir not found. Please re-run the conversion cell.')
@@ -168,7 +168,7 @@ After file conversion, manifest file is generation, we can load files to S3.
     # Create Manifest content with meta key
     manifest = {"entries": manifest_entries}
 
-    manifest_local_path = '/content/order_shipment_manifest.json'
+    manifest_local_path = '/content/order_fulfillment_manifest.json'
     with open(manifest_local_path, 'w') as f:
         json.dump(manifest, f, indent=4)
 
@@ -176,7 +176,7 @@ After file conversion, manifest file is generation, we can load files to S3.
     !aws s3 cp {local_parquet_dir} {s3_path} --recursive
 
     # Upload Manifest to S3
-    !aws s3 cp {manifest_local_path} s3://mybuck_name_is/Order_Management_System/order_shipment_manifest.json
+    !aws s3 cp {manifest_local_path} s3://mybuck_name_is/Order_Management_System/order_fulfillment_manifest.json
 
     print('\nUploaded to S3.')
   ```

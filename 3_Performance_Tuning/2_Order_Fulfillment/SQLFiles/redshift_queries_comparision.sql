@@ -22,7 +22,7 @@ ORDER BY
 --Next Day (18th June): 10.4s, 7.5s, 6s, 6s, 6.3s
 --Next (19th June): 1m 11.5s, 6.6s, 7.6s, 8.3s, 6.4s
 --Next (19th June): 5.9s, 4.8s, 4.4s, 4.5s, 4.4s
---Next (19th June):
+--Next (20th June): 56.3s, 5.9s, 6.1s, 5.9s, 6s (exception, 5 continous runs)
 
 
 -- --- OPTIMIZED VERSION ---
@@ -39,7 +39,7 @@ ORDER BY
 --Next Day (18th June): 8.4s, 6.7s, 5.3s, 5.4s, 5.4s
 --Next (19th June): 34.1s, 6.6s, 6.6s, 7.4s, 6s
 --Next (19th June): 5.3s, 5.2s, 5.3s, 5.4s, 5.3s
---Next (19th June):
+--Next (20th June): 24.4s, 5.8s, 5.9s, 5.7s, 5.5s (exception, 5 continous runs)
 
 
 
@@ -60,7 +60,7 @@ ORDER BY
 --Next Day (18th June): 1m 21.7s, 1m 11.9s, 59.2s, 57.7s, 58s
 --Next (19th June): 1m 44.3s, 1m 11.9s, 1m 11.6s, 1m 12s, 58.2s
 --Next (19th June): 59.8s, 56.8s, 56.3s, 56.7s, 56.5s
---Next (19th June):
+--Next (20th June): 1m 17.5s, 59.5s, 1m 0.2s, 57.8s, 57.3s (exception, 5 continous runs)
 
 
 -- --- OPTIMIZED VERSION ---
@@ -78,8 +78,7 @@ ORDER BY
     daily_backlog DESC;--Took (15th June): 2m 2.1s, 1m 25.9s, 1m 6.4s, 1m 6.7s, 1m 6.5s
 --Next Day (18th June): 1m 34.7s, 1m 22.1s, 1m 6.1s, 1m 7s, 1m 6.7s
 --Next (19th June): 1m 32.8s, 1m 28.3s, 1m 23.9s, 1m 8s, 1m 6.2s
---Next (19th June): 1m 6.5s, 1m 5.3s, 1m 4.6s, 1m 5.4s, 1m 4.8s
---Next (19th June):
+--Next (20th June): 1m 22s, 1m 10s, 1m 2s, 55s, 55.6s (exception, 5 continous runs)
 
 
 
@@ -98,7 +97,7 @@ LIMIT
 --Next Day (18th June): 4847 ms, 49 ms, 49 ms, 63 ms, 69 ms
 --Next (19th June): 4659 ms, 48 ms, 55 ms, 49 ms, 49 ms
 --Next (19th June): 3748 ms, 3738 ms, 3758 ms, 3788 ms, 3748 ms
---Next (19th June):
+--Next (20th June): 3694 ms, 3325 ms, 4342 ms, 3334 ms, 3329 ms (exception, 5 continous runs)
 
 
 -- --- OPTIMIZED VERSION ---
@@ -115,7 +114,7 @@ LIMIT
 --Next Day (18th June): 7099 ms, 60 ms, 48 ms, 48 ms, 49 ms
 --Next (19th June): 5029 ms, 58 ms, 49 ms,  48 ms, 58 ms
 --Next (19th June): 4419 ms, 4498 ms, 4429 ms, 4389 ms, 4448 ms
---Next (19th June):
+--Next (20th June): 4506 ms, 3757 ms, 3756 ms, 3780 ms, 3783 ms (exception, 5 continous runs)
 
 
 -- Q4:
@@ -128,7 +127,7 @@ FROM aws_project.order_fulfillment_def;--Took (15th June): 13.3s, 4.1s, 4.3s, 4.
 --Next Day (18th June): 5.1s, 3.7s, 3.7s, 4s, 3.6s
 --Next (19th June): 4.7s, 4.1s, 4.2s, 4s, 4s
 --Next (19th June): 4.1s, 4.1s, 4.1s, 4.1s, 4.2s
---Next (19th June):
+--Next (20th June): 4.2s, 757ms, 752ms, 744ms, 787ms (exception, 5 continous runs)
 
 
 -- --- OPTIMIZED VERSION ---
@@ -140,7 +139,7 @@ FROM aws_project.order_fulfillment_opt;--Took (15th June): 7.5s, 4.7s, 4.5s, 4.6
 --Next Day (18th June): 5.1s, 4.6s, 4.5s, 4.6s, 4.5s
 --Next (19th June): 5s, 4.8s, 5.2s, 4.5s, 4.5s
 --Next (19th June): 4.6s, 4.6s, 4.6s, 4.6s, 4.6s
---Next (19th June):
+--Next (20th June): 4.2s, 709ms, 693ms, 711ms, 752ms (exception, 5 continous runs)
 
 
 
@@ -163,7 +162,7 @@ LIMIT
 --Next Day (18th June): 3978 ms, 3668 ms, 3620 ms, 3579 ms, 3639 ms
 --Next (19th June): 3879 ms, 3679 ms, 5018 ms, 3599 ms, 3548 ms
 --Next (19th June): 3449 ms, 3137 ms, 3138 ms, 3151 ms, 3208 ms
---Next (19th June):
+--Next (20th June): 2721 ms, 2544 ms, 2525 ms, 2525 ms, 2421 ms (exception, 5 continous runs)
 
 
 -- --- OPTIMIZED VERSION ---
@@ -184,7 +183,7 @@ LIMIT
 --Next Day (18th June): 1039 ms, 527 ms, 459 ms, 537 ms, 469 ms
 --Next (19th June): 1038 ms, 839 ms, 1048 ms, 459 ms, 509 ms
 --Next (19th June): 479 ms, 569 ms, 499 ms, 529 ms, 418 ms
---Next (19th June):
+--Next (20th June): 398 ms, 239 ms, 236 ms, 242 ms, 234 ms (exception, 5 continous runs)
 
 
 
@@ -202,7 +201,7 @@ GROUP BY
 --Next Day (18th June): 6.9s, 4.6s, 4.5s, 4.4s, 4.3s
 --Next (19th June): 6.9s, 6.7s, 8.4s, 4.5s, 4.6s
 --Next (19th June): 4.5s, 4.6s, 4.3s, 4.5s, 4.5s
---Next (19th June):
+--Next (20th June): 4.4s, 4.4s, 3.7s, 3.8s, 3.7s (exception, 5 continous runs)
 
 
 -- --- OPTIMIZED VERSION ---
@@ -218,7 +217,7 @@ GROUP BY
 --Next Day (18th June): 6.7s, 4.8s, 4.8s, 4.7s, 4.8s
 --Next (19th June): 6.4s, 6.4s, 7.6s, 4.8s, 4.7s
 --Next (19th June): 4.9s, 4.8s, 5s, 4.9s, 4.8s
---Next (19th June):
+--Next (20th June): 4.9s, 3.6s, 3.6s, 3.6s, 3.5s (exception, 5 continous runs)
 
 
 
@@ -237,7 +236,7 @@ LIMIT
 --Next Day (18th June): 2739 ms, 68 ms, 47 ms, 49 ms, 58 ms
 --Next (19th June): 2566 ms, 58 ms, 47 ms, 58 ms, 48 ms
 --Next (19th June): 2097 ms, 2085 ms, 2087 ms, 2088 ms, 2089 ms
---Next (19th June):
+--Next (20th June): 2152 ms, 1958 ms, 1955 ms, 1958 ms, 1961 ms (exception, 5 continous runs)
 
 
 -- --- OPTIMIZED VERSION ---
@@ -254,7 +253,7 @@ LIMIT
 --Next Day (18th June): 2416 ms, 57 ms, 59 ms, 49 ms, 55 ms
 --Next (19th June): 2347 ms, 68 ms, 49 ms, 50 ms, 49 ms
 --Next (19th June): 1843 ms, 1879 ms, 1837 ms, 1879 ms, 1832 ms
---Next (19th June):
+--Next (20th June): 1923 ms, 1752 ms, 1749 ms, 1754 ms, 1754 ms (exception, 5 continous runs)
 
 
 
@@ -272,8 +271,7 @@ ORDER BY
     capability_tier ASC;--Took (15th June): 2.6s, 1.9s, 1.8s, 1.7s, 1.8s
 --Next Day (18th June): 4.3s, 1.8s, 1.8s, 1.7s, 1.8s
 --Next (19th June): 4.2s, 4.2s, 4.5s, 1.8s, 1.8s
---Next (19th June): 1.8s, 1.8s, 1.9s, 1.8s, 1.8s
---Next (19th June):
+--Next (20th June): 2.1s, 1.7s, 1.7s, 1.8s, 1.7s (exception, 5 continous runs)
 
 
 -- --- OPTIMIZED VERSION ---
@@ -290,4 +288,4 @@ ORDER BY
 --Next Day (18th June): 4.1s, 2.3s, 2.3s, 2.4s, 2.4s
 --Next (19th June): 4s, 4.2s, 4.5s, 2.3s, 2.3s
 --Next (19th June): 2.3s, 2.3s, 2.1s, 2.3s, 2.3s
---Next (19th June):
+--Next (20th June): 2.1s, 1.7s, 1.7s, 1.8s, 1.7s (exception, 5 continous runs)

@@ -22,6 +22,7 @@ LIMIT
     5;
 
 
+
 -- Q2:
 
 SELECT
@@ -33,3 +34,37 @@ JOIN aws_project.finance_customer_data_stg AS c-- We must have record here
     ON c.customer_id = l.customer_id
 WHERE
     a.acc_opening_date <= l.start_date;
+
+
+
+-- Q3:
+
+SELECT DISTINCT
+    c.customer_id,
+    c.first_name,
+    c.last_name,
+    c.email,
+    a.acc_opening_date
+FROM aws_project.finance_customer_data_stg AS c
+JOIN aws_project.finance_account_data_stg AS a
+    ON a.customer_id = c.customer_id
+WHERE
+    a.acc_opening_date <= CURRENT_DATE - INTERVAL 5 YEAR;
+
+
+-- Q4:
+
+SELECT
+    currency_code,
+    SUM(CASE WHEN tran_status = 'TranStatus.C' THEN 1 ELSE 0 END) AS completed_count,
+    SUM(CASE WHEN tran_status = 'TranStatus.F' THEN 1 ELSE 0 END) AS failed_count
+FROM aws_project.finance_transaction_data_stg
+GROUP BY
+    currency_code
+ORDER BY
+    completed_count DESC,
+    failed_count DESC;
+
+
+
+-- Q5:

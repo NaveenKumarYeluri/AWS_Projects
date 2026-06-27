@@ -68,3 +68,58 @@ ORDER BY
 
 
 -- Q5:
+
+SELECT
+    t.transaction_id,
+    t.amount,
+    t.currency_code,
+    c.city,
+    c.country
+FROM aws_project.finance_transaction_data_stg AS t
+JOIN aws_project.finance_account_data_stg AS a
+    ON a.account_id = t.src_account_id
+JOIN aws_project.finance_customer_data_stg AS c
+    ON c.customer_id = a.customer_id
+ORDER BY
+    t.amount DESC
+LIMIT
+    10;
+
+
+-- Q6 (1):
+
+SELECT
+    c.country,
+    SUM(l.amount) AS total_expenses
+FROM aws_project.finance_ledger_data_stg AS l
+JOIN aws_project.finance_account_data_stg AS a
+    ON a.account_id = l.account_id
+JOIN aws_project.finance_customer_data_stg AS c
+    ON c.customer_id = a.customer_id
+WHERE
+    LOWER(l.ledger_type) = 'expense'
+GROUP BY
+    c.country
+ORDER BY
+    total_expenses DESC
+LIMIT
+    1;
+
+
+-- Q6(2):
+
+
+SELECT
+    c.country,
+    SUM(l.amount) AS total_income
+FROM aws_project.finance_ledger_data_stg AS l
+JOIN aws_project.finance_account_data_stg AS a
+    ON a.account_id = l.account_id
+JOIN aws_project.finance_customer_data_stg AS c
+    ON c.customer_id = a.customer_id
+GROUP BY
+    c.country
+ORDER BY
+    total_income DESC
+LIMIT
+    25;

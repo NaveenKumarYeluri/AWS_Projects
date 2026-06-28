@@ -52,6 +52,7 @@ WHERE
     a.acc_opening_date <= CURRENT_DATE - INTERVAL 5 YEAR;
 
 
+
 -- Q4:
 
 SELECT
@@ -86,6 +87,7 @@ LIMIT
     10;
 
 
+
 -- Q6 (1):
 
 SELECT
@@ -106,6 +108,7 @@ LIMIT
     1;
 
 
+
 -- Q6(2):
 
 
@@ -123,3 +126,96 @@ ORDER BY
     total_income DESC
 LIMIT
     25;
+
+
+
+-- Q7:
+
+SELECT
+    c.country,
+    COUNT(l.loan_id) AS total_loan_count,
+    SUM(l.principal_amount) AS total_principal_distributed
+FROM aws_project.finance_loan_data_stg AS l
+JOIN aws_project.finance_customer_data_stg AS c
+    ON c.customer_id = l.customer_id
+GROUP BY
+    c.country
+ORDER BY
+    total_principal_distributed DESC;
+
+
+
+-- Q8:
+
+SELECT
+    c.country,
+    COUNT(l.ledger_id) AS total_equity_count,
+    SUM(l.amount) AS total_equity
+FROM aws_project.finance_ledger_data_stg AS l
+JOIN aws_project.finance_account_data_stg AS a
+    ON a.account_id = l.account_id
+JOIN aws_project.finance_customer_data_stg AS c
+    ON c.customer_id = a.customer_id
+WHERE
+    l.ledger_type = 'Equity'
+GROUP BY
+    c.country
+ORDER BY
+    total_equity DESC;
+
+
+
+-- Q9:
+
+WITH age_group_loan_counts AS (
+    SELECT
+        l.loan_id
+        , l.loan_type
+        , l.principal_amount
+        , CASE
+            WHEN DATE_DIFF('year', c.date_of_birth, CURRENT_DATE) BETWEEN 18 AND 25 THEN '18-25'
+            WHEN DATE_DIFF('year', c.date_of_birth, CURRENT_DATE) BETWEEN 26 AND 35 THEN '26-35'
+            WHEN DATE_DIFF('year', c.date_of_birth, CURRENT_DATE) BETWEEN 36 AND 45 THEN '36-45'
+            WHEN DATE_DIFF('year', c.date_of_birth, CURRENT_DATE) BETWEEN 46 AND 55 THEN '46-55'
+            WHEN DATE_DIFF('year', c.date_of_birth, CURRENT_DATE) > 55 THEN '55+'
+            ELSE 'Unknown/Other'
+        END AS age_group
+    FROM aws_project.finance_loan_data_stg AS l
+    JOIN aws_project.finance_customer_data_stg AS c
+        ON c.customer_id = l.customer_id
+)
+SELECT
+    age_group
+    , loan_type
+    , COUNT(*) AS total_loans_taken
+    , SUM(principal_amount) AS total_borrowed_volume
+FROM age_group_loan_counts
+GROUP BY
+    age_group
+    , loan_type
+ORDER BY
+    total_borrowed_volume DESC
+LIMIT
+    1;
+
+
+
+-- Q10:
+
+SELECT
+    a.currency_code,
+    c.country,
+    COUNT(l.ledger_id) AS total_ledger_transactions,
+    SUM(l.amount) AS total_ledger_volume
+FROM aws_project.finance_ledger_data_stg AS l
+JOIN aws_project.finance_account_data_stg AS a
+    ON a.account_id = l.account_id
+JOIN aws_project.finance_customer_data_stg AS c
+    ON c.customer_id = a.customer_id
+GROUP BY
+    a.currency_code,
+    c.country
+ORDER BY
+    total_ledger_transactions DESC
+LIMIT
+    1;

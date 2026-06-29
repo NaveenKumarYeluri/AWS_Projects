@@ -40,24 +40,30 @@ This component tackles the optimization of a 25-crore-row `order_fulfillment` st
     * **Zone Map Dominance:** Proved that applying a `SORTKEY` allowed Redshift to skip 99% of physical disk blocks, dropping a 9.7-second full-table scan down to just 578 milliseconds.
 
 ## 🚀 Part 3: Financial Data Optimization (Upcoming)
-This final component will focus on tuning highly complex financial reporting structures.
+This final component executes complex financial analytics on a multi-table financial dataset. Moving away from distributed MPP tuning, this module shifts to an in-memory, vectorized analytical engine to perform heavy SQL aggregations while dynamically handling severe referential integrity anomalies.
 
-* **Upcoming Objectives:**
+* **Workflow & Architecture:**
 
-Analyzing financial query access patterns to determine the optimal `DISTKEY` and `SORTKEY` combinations.
+    * **Vectorized Engine Efficiency:** Initialized **DuckDB** within Google Colab to leverage its state-of-the-art columnar, vectorized execution engine. This allowed for blazing-fast analytical processing using local RAM/CPU, bypassing the need for cloud network distribution (`DISTKEY`) or disk sorting (SORTKEY).
 
-Writing and optimizing advanced SQL aggregations and window functions for massive financial datasets.
+    * **The Orphan Anomaly & Data Quality:** Discovered a massive data quality anomaly where millions of "Orphan Records" in the synthetic data lacked matching master records, which triggered strict `ConstraintException` errors. To avoid dropping data and altering analytical volume, strict DDL constraints were bypassed, and the staging (`_stg`) tables were queried directly.
+
+* **Database Administration & Optimization:**
+
+   * **Dynamic Data Quality Enforcement:** Enforced referential integrity dynamically at the SQL query execution level by adding strict `INNER JOIN` clauses to verified master tables. This successfully constructed a pristine analytical view layer directly over dirty data.
+
+   * **Advanced Analytical SQL:** Engineered 10+ complex business statements utilizing advanced SQL patterns, including Common Table Expressions (CTEs) for demographic bucketing (`DATE_DIFF`), conditional aggregations (`CASE` inside `SUM()`), and Anti-Joins (`EXCEPT`, `NOT IN`) for precise data validation without relying on outer joins.
 
 ## ⚙️ Technologies Stack
 
-**Cloud Data Warehouse:** Amazon Redshift Serverless (Massively Parallel Processing Architecture)
+**Cloud Data Warehouse:** Amazon Redshift Serverless (Massively Parallel Processing Architecture), DuckDB (In-Memory Vectorized Columnar Execution)
 
-**Storage & Architecture Modeling:** Amazon S3, Columnar Storage, Parquet, JSON Manifests, Distribution Styles (DISTSTYLE EVEN, DISTSTYLE KEY), Sort Keys (SORTKEY), Data Skew Management
+**Storage & Architecture Modeling:** Amazon S3, Columnar Storage, Parquet, JSON Manifests, Distribution Styles (`DISTSTYLE EVEN`, `DISTSTYLE KEY`), Sort Keys (`SORTKEY`), Data Skew Management
 
-**Performance Diagnostics:** Query Execution Plans (EXPLAIN), Collocated Joins, Network Broadcast Elimination (DS_DIST_NONE, DS_DIST_INNER), I/O Zone Map Pruning
+**Performance Diagnostics:** Query Execution Plans (`EXPLAIN`), Collocated Joins, Network Broadcast Elimination (`DS_DIST_NONE`, `DS_DIST_INNER`), I/O Zone Map Pruning
 
-**System Monitoring & Auditing:** Redshift System Views (SYS_QUERY_HISTORY, SYS_QUERY_DETAIL, svv_table_info)
+**System Monitoring & Auditing:** Redshift System Views (`SYS_QUERY_HISTORY`, `SYS_QUERY_DETAIL`, `svv_table_info`)
 
-**Data Engineering Techniques:** Google Colab Pipelines, CSV-to-Parquet Conversion, Redshift COPY Ingestion, Deep Copy (CREATE TABLE AS SELECT), Update Anomaly Resolution
+**Data Engineering Techniques:** Google Colab Pipelines, CSV-to-Parquet Conversion, Redshift `COPY` Ingestion, Deep Copy (`CREATE TABLE AS SELECT`), Update Anomaly Resolution
 
 **Scripting & Querying:** Python (Boto3), AWS CLI, Advanced ANSI SQL, Time-Series Aggregations

@@ -64,11 +64,13 @@ WHERE
 
 
 -- Check Integration activity.
-SELECT *
+SELECT
+    *
 FROM sys_integration_activity
 ORDER BY
     last_commit_timestamp DESC
-LIMIT 10;
+LIMIT
+    10;
 
 
 SELECT
@@ -143,7 +145,8 @@ FROM svv_table_info
 WHERE
     table_name IN ('applicant', 'institute'
     , 'applicant_optimized', 'applicant_institute_gold')
-ORDER BY skew_rows DESC;
+ORDER BY
+    skew_rows DESC;
 
 
 -- Our SP
@@ -240,7 +243,8 @@ FROM svv_table_info
 WHERE
     table_name IN ('applicant', 'institute'
     , 'applicant_optimized', 'applicant_optimized_nosort', 'applicant_institute_gold')
-ORDER BY skew_rows DESC;
+ORDER BY
+    skew_rows DESC;
 
 
 
@@ -393,7 +397,8 @@ FROM svv_table_info
 WHERE
 table_name IN ('applicant', 'institute'
 , 'applicant_optimized', 'applicant_institute_gold_mv')
-ORDER BY skew_rows DESC;
+ORDER BY
+    skew_rows DESC;
 
 
 table_schema  table_name                  encoded           diststyle            sortkey1               skew_rows  skew_sortkey1  size_mb   pct_used

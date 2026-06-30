@@ -1,4 +1,4 @@
--- 1)
+-- Q1:
 
 SELECT DISTINCT
     flight_id,
@@ -10,7 +10,7 @@ WHERE
     AND avg_flight_speed_kmps IS NOT NULL;
 
 
--- 2)
+-- Q2:
 
 SELECT
     origin_airport,
@@ -22,10 +22,11 @@ GROUP BY
     destination_airport
 ORDER BY
     total_passengers DESC
-LIMIT 1;
+LIMIT
+    1;
 
 
--- 3)
+-- Q3:
 
 WITH All_City_Interactions AS (
     SELECT
@@ -48,10 +49,11 @@ GROUP BY
     city_airport
 ORDER BY
     total_unique_flights DESC
-LIMIT 10;
+LIMIT
+    10;
 
 
--- 4)
+-- Q4:
 
 SELECT
     origin_airport,
@@ -63,10 +65,11 @@ GROUP BY
     destination_airport
 ORDER BY
     avg_turbulence_score DESC
-LIMIT 10;
+LIMIT
+    10;
 
 
--- 5)
+-- Q5:
 
 WITH stats AS (
     SELECT
@@ -99,7 +102,7 @@ ORDER BY
     correlation_score DESC;
 
 
--- 6)
+-- Q6:
 
 SELECT
     airplane_model,
@@ -116,10 +119,11 @@ GROUP BY
     airplane_model
 ORDER BY
     fule_economy DESC
-LIMIT 20;
+LIMIT
+    20;
 
 
--- 7)
+-- Q7:
 
 WITH total_tickets AS (
     SELECT
@@ -152,7 +156,7 @@ SELECT
 FROM per_year_tickets_cnt;
 
 
--- 8)
+-- Q8:
 
 /*
 -------------------------------------------------------------------------
@@ -163,7 +167,7 @@ FROM per_year_tickets_cnt;
 */
 
 
---9)
+-- Q9:
 
 /*
 -------------------------------------------------------------------------
@@ -174,7 +178,7 @@ FROM per_year_tickets_cnt;
 */
 
 
--- 10)
+-- Q10:
 
 SELECT
     airplane_model,
@@ -191,10 +195,11 @@ GROUP BY
     airplane_model;
 ORDER BY
     avg_rpm_per_km AVG
-LIMIT 10;
+LIMIT
+    10;
 
 
--- 11)
+-- Q11:
 
 WITH stats AS (
     SELECT
@@ -217,7 +222,7 @@ SELECT
 FROM stats;
 
 
--- 12)
+-- Q12:
 
 SELECT
     passenger_country,
@@ -229,10 +234,11 @@ GROUP BY
     passenger_country
 ORDER BY
     tickets_per_country DESC
-LIMIT 5;
+LIMIT
+    5;
 
 
--- 13)
+-- Q13:
 
 WITH age_calculation AS (
     SELECT
@@ -257,7 +263,7 @@ ORDER BY
     age_group ASC;
 
 
--- 14)
+-- Q14:
 
 WITH age_calculation AS (
     SELECT
@@ -297,7 +303,7 @@ ORDER BY
     passenger_flight_class ASC;
 
 
--- 15)
+-- Q15:
 
 /*
 -------------------------------------------------------------------------
@@ -308,7 +314,7 @@ ORDER BY
 */
 
 
--- 16)
+-- Q16:
 
 SELECT
     origin_airport,
@@ -328,7 +334,7 @@ ORDER BY
     avg_route_cost DESC;
 
 
--- 17)
+-- Q17:
 
 SELECT
     d.calendar_year,
@@ -365,7 +371,7 @@ ORDER BY
     calendar_month ASC;
 
 
--- 18)
+-- Q18:
 
 SELECT
     origin_airport,
@@ -381,10 +387,11 @@ GROUP BY
     destination_airport
 ORDER BY
     max_turbulence DESC
-LIMIT 1;
+LIMIT
+    1;
 
 
--- 19)
+-- Q19:
 
 WITH landing_flights AS (
     SELECT
@@ -414,7 +421,7 @@ ORDER BY
     travel_year ASC;
 
 
--- 20)
+-- Q20:
 
 WITH All_Airport_Movements AS (
     SELECT

@@ -1,7 +1,7 @@
 -- Now we will validate data. We have developed the same dataset in a different approach as part 1 of this Project 2.
 -- We have deafult LIMIT 100
 
--- OLD (Q1):
+-- OLD Q1:
 
 SELECT
     applicant_id_sk,
@@ -17,7 +17,7 @@ ORDER BY
     a.applicant_name;-- Took: 233 ms (after multiple runs)
 
 
--- NEW (Q1):
+-- NEW Q1:
 
 SELECT
     applicant_id_sk,
@@ -32,7 +32,7 @@ ORDER BY
 
 
 
--- OLD (Q2):
+-- OLD Q2:
 
 SELECT
     -- 1. Personal Details
@@ -68,7 +68,7 @@ WHERE
 
 
 
--- NEW (Q2):
+-- NEW Q2:
 
 SELECT
     -- 1. Personal Details
@@ -101,7 +101,7 @@ WHERE
     applicant_id_sk = 200006;-- Took: 48 ms
 
 
--- OLD (Q3):
+-- OLD Q3:
 
 SELECT
     i.institute_name,
@@ -117,7 +117,7 @@ ORDER BY
     students_cnt DESC;-- Took: 10 ms
 
 
--- NEW (Q3):
+-- NEW Q3:
 
 SELECT
     institute_name,
@@ -132,7 +132,7 @@ ORDER BY
 
 
 
--- OLD (Q4):
+-- OLD Q4:
 
 SELECT
     institute_id_sk,
@@ -151,7 +151,7 @@ WHERE
     institute_id_sk = 'TISN707';-- Took: 10 ms
 
 
--- NEW (Q4):
+-- NEW Q4:
 
 SELECT DISTINCT
     institute_id_sk,
@@ -171,7 +171,7 @@ WHERE
 
 
 
--- OLD (Q5):
+-- OLD Q5:
 
 SELECT
     a.applicant_id_sk,
@@ -190,7 +190,7 @@ ORDER BY
     a.applicant_name;-- Took: 8 ms
 
 
--- NEW (Q5):
+-- NEW Q5:
 
 SELECT
     applicant_id_sk,
@@ -208,7 +208,7 @@ ORDER BY
 
 
 
--- OLD (Q6):
+-- OLD Q6:
 
 SELECT
     applicant_id_sk,
@@ -226,7 +226,7 @@ WHERE
     applicant_id_sk = 200006;-- Took: 10 ms
 
 
--- NEW (Q6):
+-- NEW Q6:
 
 SELECT
     applicant_id_sk,
@@ -245,7 +245,7 @@ WHERE
 
 
 
--- OLD (Q7):
+-- OLD Q7:
 
 SELECT
     institute_id_sk,
@@ -260,7 +260,7 @@ ORDER BY
     institute_id_sk;-- Took: 10 ms
 
 
--- NEW (Q7):
+-- NEW Q7:
 
 SELECT DISTINCT
     institute_id_sk,
@@ -276,7 +276,7 @@ ORDER BY
 
 
 
--- OLD (Q8):
+-- OLD Q8:
 
 SELECT
     applicant_id_sk,
@@ -291,7 +291,7 @@ ORDER BY
     applicant_name ASC;-- Took: 11 ms
 
 
--- NEW (Q8):
+-- NEW Q8:
 
 SELECT
     applicant_id_sk,
@@ -307,7 +307,7 @@ ORDER BY
 
 
 
--- OLD (Q9):
+-- OLD Q9:
 
 SELECT
     institute_name,
@@ -315,10 +315,11 @@ SELECT
 FROM aws_project.institute
 ORDER BY
     declined_no_of_student_pct DESC
-LIMIT 5;-- Took: 279 ms
+LIMIT
+    5;-- Took: 279 ms
 
 
--- NEW (Q9):
+-- NEW Q9:
 
 SELECT DISTINCT
     institute_name,
@@ -326,7 +327,8 @@ SELECT DISTINCT
 FROM applicant_institute_gold
 ORDER BY
     declined_no_of_student_pct DESC
-LIMIT 5;-- Took: 230 ms
+LIMIT
+    5;-- Took: 230 ms
 
 
 -- Observation: As for today the old method is working better compared to today's.
@@ -338,7 +340,7 @@ LIMIT 5;-- Took: 230 ms
 
 -- Now we will validate data. We have developed the same dataset in a different approach as part 1 of this Project 2.
 
--- OLD (Q1):
+-- OLD Q1:
 
 SELECT
     applicant_id_sk,
@@ -354,7 +356,7 @@ ORDER BY
     a.applicant_name;-- Took: 269 ms (after multiple runs)
 
 
--- NEW (Q1):
+-- NEW Q1:
 
 SELECT
     applicant_id_sk,
@@ -369,7 +371,7 @@ ORDER BY
 
 
 
--- OLD (Q2):
+-- OLD Q2:
 
 SELECT
     -- 1. Personal Details
@@ -404,7 +406,7 @@ WHERE
     a.applicant_id_sk = 200006;-- Took: 8 ms
 
 
--- NEW (Q2):
+-- NEW Q2:
 
 SELECT
     -- 1. Personal Details
@@ -437,7 +439,7 @@ WHERE
     applicant_id_sk = 200006;-- Took: 25 ms
 
 
--- OLD (Q3):
+-- OLD Q3:
 
 SELECT
     i.institute_name,
@@ -453,7 +455,7 @@ ORDER BY
     students_cnt DESC;-- Took: 10 ms
 
 
--- NEW (Q3):
+-- NEW Q3:
 
 SELECT
     institute_name,
@@ -468,7 +470,7 @@ ORDER BY
 
 
 
--- OLD (Q4):
+-- OLD Q4:
 
 SELECT
     institute_id_sk,
@@ -487,7 +489,7 @@ WHERE
     institute_id_sk = 'TISN707';-- Took: 11 ms
 
 
--- NEW (Q4):
+-- NEW Q4:
 
 SELECT DISTINCT
     institute_id_sk,
@@ -507,7 +509,7 @@ WHERE
 
 
 
--- OLD (Q5):
+-- OLD Q5:
 
 SELECT
     a.applicant_id_sk,
@@ -526,7 +528,7 @@ ORDER BY
     a.applicant_name;-- Took: 13 ms
 
 
--- NEW (Q5):
+-- NEW Q5:
 
 SELECT
     applicant_id_sk,
@@ -544,7 +546,7 @@ ORDER BY
 
 
 
--- OLD (Q6):
+-- OLD Q6:
 
 SELECT
     applicant_id_sk,
@@ -562,7 +564,7 @@ WHERE
     applicant_id_sk = 200006;-- Took: 7 ms
 
 
--- NEW (Q6):
+-- NEW Q6:
 
 SELECT
     applicant_id_sk,
@@ -581,7 +583,7 @@ WHERE
 
 
 
--- OLD (Q7):
+-- OLD Q7:
 
 SELECT
     institute_id_sk,
@@ -596,7 +598,7 @@ ORDER BY
     institute_id_sk;-- Took: 8 ms
 
 
--- NEW (Q7):
+-- NEW Q7:
 
 SELECT DISTINCT
     institute_id_sk,
@@ -612,7 +614,7 @@ ORDER BY
 
 
 
--- OLD (Q8):
+-- OLD Q8:
 
 SELECT
     applicant_id_sk,
@@ -627,7 +629,7 @@ ORDER BY
     applicant_name ASC;-- Took: 8 ms
 
 
--- NEW (Q8):
+-- NEW Q8:
 
 SELECT
     applicant_id_sk,
@@ -643,7 +645,7 @@ ORDER BY
 
 
 
--- OLD (Q9):
+-- OLD Q9:
 
 SELECT DISTINCT
     institute_name,
@@ -652,10 +654,11 @@ FROM aws_project.institute_optimized
 ORDER BY
     declined_no_of_student_pct DESC,
     institute_name
-LIMIT 5;-- Took: 7 ms
+LIMIT
+    5;-- Took: 7 ms
 
 
--- NEW (Q9):
+-- NEW Q9:
 
 SELECT DISTINCT
     institute_name,
@@ -664,7 +667,8 @@ FROM applicant_institute_gold_mv
 ORDER BY
     declined_no_of_student_pct DESC,
     institute_name
-LIMIT 5;-- Took: 27 ms
+LIMIT
+    5;-- Took: 27 ms
 
 
 -- Compared to this MV, individual tables we created earlier were working better.
